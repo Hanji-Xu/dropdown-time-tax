@@ -3,525 +3,367 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
 <title>Dropdown Time Tax</title>
 <style>
 :root{
-  --bg:#f6f3ec; --panel:#fffdf8; --ink:#1d1b17; --muted:#6b655a; --line:#ddd6c7;
-  --accent:#c2410c; --accent-soft:#fbe3d6; --cool:#1d4ed8; --cool-soft:#dbe6fd;
-  --good:#15803d; --est:#a16207; --est-soft:#fdf1cf; --data:#1d4ed8; --data-soft:#dbe6fd;
-  --model:#7e22ce; --model-soft:#efe0fb; --bar:#cfc6b4;
-  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
-  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#16140f; --panel:#1f1c16; --ink:#efe9dc; --muted:#a59d8c; --line:#3a352a;
-    --accent:#fb923c; --accent-soft:#3b2312; --cool:#7aa2ff; --cool-soft:#1c2747;
-    --good:#4ade80; --est:#facc15; --est-soft:#3a3010; --data:#7aa2ff; --data-soft:#1c2747;
-    --model:#d8b4fe; --model-soft:#33204a; --bar:#4a4436;
-  }
-}
-:root[data-theme="dark"]{
-    --bg:#16140f; --panel:#1f1c16; --ink:#efe9dc; --muted:#a59d8c; --line:#3a352a;
-    --accent:#fb923c; --accent-soft:#3b2312; --cool:#7aa2ff; --cool-soft:#1c2747;
-    --good:#4ade80; --est:#facc15; --est-soft:#3a3010; --data:#7aa2ff; --data-soft:#1c2747;
-    --model:#d8b4fe; --model-soft:#33204a; --bar:#4a4436;
+  --ink:#111; --muted:#555; --line:#bbb; --rule:#ddd; --bg:#fff; --band:#eee; --head:#2f3b4c;
+  --link:#0645ad; --visited:#0b0080; --hl:#fff3b0; --warn:#8a1c1c;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans)}
-main{max-width:1040px;margin:0 auto;padding:28px 16px 80px}
-h1{font:600 clamp(30px,5vw,48px)/1.05 var(--serif);margin:0 0 8px;letter-spacing:-.01em}
-h2{font:600 24px/1.2 var(--serif);margin:0 0 6px}
-h3{font-size:15px;margin:18px 0 6px}
-p{margin:0 0 10px}
-.lede{color:var(--muted);max-width:720px;font-size:17px}
-.kicker{font:600 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
-section{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:18px 0}
-.row{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end}
-label{font-size:13px;color:var(--muted);display:block}
-select{max-width:100%}
-.row>div{min-width:0;max-width:100%}
-select,button,input[type=number]{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
-button{cursor:pointer}
-button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
-#pick{font-size:20px;padding:12px 14px;min-width:min(340px,100%);border:2px solid var(--accent)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:16px}
-.stat{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--bg)}
-.stat .v{font:600 28px/1.1 var(--serif)}
-.stat .v small{font-size:15px;color:var(--muted);font-weight:400}
-.stat .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
-.stat .s{font-size:13px;color:var(--muted);margin-top:4px}
-.tag{display:inline-block;font:600 10px/1 var(--mono);letter-spacing:.08em;padding:3px 5px;border-radius:4px;vertical-align:2px;margin-left:4px}
-.tag.data{background:var(--data-soft);color:var(--data)}
-.tag.est{background:var(--est-soft);color:var(--est)}
-.tag.model{background:var(--model-soft);color:var(--model)}
-.tag.you{background:var(--accent-soft);color:var(--accent)}
-.chart{width:100%;height:auto;display:block;margin-top:10px}
-.chart text{fill:var(--muted);font:11px var(--sans)}
-.chart .lab{fill:var(--ink);font-weight:600}
-.verdict{font:500 19px/1.4 var(--serif);margin:14px 0 0;padding:12px 14px;border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0}
-details{margin-top:12px}
-summary{cursor:pointer;font-weight:600}
-.knobs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px 20px;margin-top:12px}
-.knob input[type=range]{width:100%}
-.knob .val{font:600 13px var(--mono);color:var(--ink)}
-.knob .why{font-size:12px;color:var(--muted);margin-top:2px}
-table{border-collapse:collapse;width:100%;font-size:14px}
-th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.45 Arial, Helvetica, sans-serif}
+a{color:var(--link)} a:visited{color:var(--visited)}
+.notice{background:var(--band);border-bottom:1px solid var(--line);font-size:11px;padding:3px 16px;color:var(--muted)}
+header{background:var(--head);color:#fff;padding:8px 16px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px}
+header .seal{font:bold 17px Georgia, "Times New Roman", serif;letter-spacing:.01em}
+header .sub{font-size:11px;opacity:.85}
+.crumbs{font-size:11px;padding:5px 16px;border-bottom:1px solid var(--rule);color:var(--muted)}
+.wrap{display:flex;max-width:1180px;margin:0 auto;padding:0 16px}
+nav{flex:0 0 180px;padding:12px 14px 30px 0;border-right:1px solid var(--rule);font-size:12px}
+nav h4{margin:12px 0 3px;font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.04em}
+nav ul{list-style:none;margin:0;padding:0}
+nav li{padding:1px 0}
+main{flex:1;min-width:0;padding:12px 0 40px 18px}
+h1{font:normal 24px Georgia, "Times New Roman", serif;margin:6px 0 2px;border-bottom:1px solid var(--line);padding-bottom:3px}
+.formno{font-size:11px;color:var(--muted);margin-bottom:10px}
+h2{font-size:14px;margin:18px 0 6px;padding:3px 6px;background:var(--band);border:1px solid var(--line)}
+h3{font-size:13px;margin:12px 0 4px}
+p{margin:0 0 8px}
+.intro{max-width:760px}
+fieldset{border:1px solid var(--line);margin:0 0 8px;padding:8px 10px 10px;min-width:0}
+legend{font-weight:bold;padding:0 4px}
+label{font-weight:bold}
+select,input,button{font:13px Arial, Helvetica, sans-serif;color:var(--ink)}
+select{max-width:100%;padding:1px 2px}
+input[type=number]{width:80px}
+button{padding:2px 10px}
+.req{color:var(--warn)}
+.field{margin:6px 0}
+.field .help{font-size:11px;color:var(--muted)}
+table{border-collapse:collapse;font-size:12px;margin:6px 0 10px;width:100%}
+th,td{border:1px solid var(--line);padding:3px 6px;text-align:left;vertical-align:top}
+th{background:var(--band);font-weight:bold}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.you td{background:var(--hl)}
 .tablewrap{overflow-x:auto}
-code,.mono{font-family:var(--mono);font-size:13px}
-.eq{font-family:var(--mono);font-size:13px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-x:auto;white-space:pre}
-.muted{color:var(--muted)}
-.toggle{display:flex;gap:6px;align-items:center;font-size:14px;color:var(--ink)}
-#trialTarget{font:600 22px var(--serif);color:var(--accent)}
-.note{font-size:13px;color:var(--muted)}
-a{color:var(--cool)}
-.themebtn{position:fixed;top:12px;right:12px;font-size:12px;padding:6px 9px;opacity:.8}
+.status{font-size:12px;margin:4px 0;padding:4px 6px;border:1px solid var(--line);background:#fafafa}
+.status b{color:var(--ink)}
+.meter{position:relative;height:9px;border:1px solid var(--line);background:#f6f6f6;margin:3px 0 2px;max-width:420px}
+.meter span{position:absolute;top:-1px;width:3px;height:9px;background:var(--warn)}
+.small{font-size:11px;color:var(--muted)}
+.statement{border:2px solid var(--ink);padding:8px 12px;margin:10px 0;max-width:760px}
+.statement h3{margin:0 0 6px;font-family:Georgia, "Times New Roman", serif;font-size:15px}
+.notes{font-size:11.5px;line-height:1.45;text-align:justify;max-width:900px}
+.notes h3{font-size:12px;margin:10px 0 3px}
+.notes p{margin:0 0 6px}
+.notes table{font-size:11px}
+#trialTarget{font-weight:bold;background:var(--hl);padding:0 4px}
+footer{border-top:1px solid var(--line);font-size:11px;color:var(--muted);padding:8px 16px;max-width:1180px;margin:0 auto}
+@media (max-width:720px){
+  .wrap{display:block}
+  nav{border-right:0;border-bottom:1px solid var(--rule);padding:6px 0}
+  nav ul{display:flex;flex-wrap:wrap;gap:2px 12px}
+  nav h4{display:none}
+  main{padding-left:0}
+}
 </style>
 </head>
 <body>
-<button class="themebtn" id="themeBtn" type="button" aria-label="Toggle light or dark theme">◐</button>
-<main>
-<div class="kicker">Art Insights · __NUM__</div>
-<h1>Dropdown Time Tax</h1>
-<p class="lede">Alaska is second in every alphabetical list of US state names, so Alaskans barely scroll. Wyoming is last. Pick where you live below, in a real dropdown, and see what your place in the alphabet costs you over a lifetime. Then see what your place on the map costs you in commuting, which turns out to be a much bigger bill.</p>
-<p class="note">Labels: <span class="tag data">DATA</span> sourced figure · <span class="tag est">EST</span> estimate you can change · <span class="tag model">MODEL</span> a formula we chose · <span class="tag you">YOU</span> measured from your own hand on this page.</p>
-
-<section id="s1">
-  <h2>1 · The scroll tax</h2>
-  <div class="row">
-    <div>
-      <label for="listKind">Which dropdown?</label>
-      <select id="listKind">
-        <option value="us50dc">US states + DC (51 entries)</option>
-        <option value="us50">US states only (50)</option>
-        <option value="usTerr">US states + DC + 5 territories (56)</option>
-        <option value="usAbbr">US by postal code (51, sorted AK, AL, AR…)</option>
-        <option value="iso">Countries, ISO 3166-1 (249)</option>
-      </select>
-    </div>
-    <label class="toggle" id="pinWrap"><input type="checkbox" id="pinTop"> site pins my choice to the top</label>
-  </div>
-  <div style="margin-top:16px">
-    <label for="pick">Where do you live? <span class="tag you">TIMED</span></label>
-    <select id="pick"></select>
-    <div class="note" id="timing">Your pick is timed from the moment you open the menu to the moment you choose.</div>
-  </div>
-
-  <div class="stats">
-    <div class="stat"><div class="k">Position</div><div class="v" id="oPos">–</div><div class="s" id="oPosS"></div></div>
-    <div class="stat"><div class="k">Extra time per pick <span class="tag model">MODEL</span></div><div class="v" id="oPer">–</div><div class="s">vs. the first entry in the list</div></div>
-    <div class="stat"><div class="k">Lifetime scroll tax <span class="tag est">EST</span></div><div class="v" id="oLife">–</div><div class="s" id="oLifeS"></div></div>
-    <div class="stat"><div class="k">Everyone there, per year <span class="tag est">EST</span></div><div class="v" id="oPop">–</div><div class="s" id="oPopS"></div></div>
-  </div>
-  <p class="verdict" id="verdict1"></p>
-
-  <svg class="chart" id="chart1" viewBox="0 0 1000 240" role="img" aria-label="Lifetime scroll tax for every entry in the list"></svg>
-  <p class="note">Each bar is one entry of the dropdown, in list order. Height is that entry's lifetime scroll tax with the settings below. The highlighted bar is yours.</p>
-
-  <details>
-    <summary>Change the assumptions</summary>
-    <div class="knobs" id="knobs"></div>
-  </details>
-</section>
-
-<section id="s2">
-  <h2>2 · The waiting tax</h2>
-  <p class="muted">Crowded places make you wait. The waiting time we can actually source for every state is the commute: the Census Bureau's American Community Survey asks workers how long their trip to work takes. Some of that is moving, a lot of it in dense places is queues, lights and traffic. It is a proxy for waiting, not a stopwatch on queues.</p>
-  <div id="waitBox"></div>
-  <svg class="chart" id="chart2" viewBox="0 0 1000 360" role="img" aria-label="Population density versus mean commute time by state"></svg>
-  <p class="note" id="fitNote"></p>
-  <p class="verdict" id="verdict2"></p>
-</section>
-
-<section id="s3">
-  <h2>3 · Calibrate with your own hand</h2>
-  <p class="muted">The per-row costs above are estimates. Replace them with yours. Press start, then find each named entry in the dropdown as fast as you can. After 8 picks we fit a straight line of time against list position. Its slope is your personal cost per row.</p>
-  <div class="row">
-    <button class="primary" id="trialStart" type="button">Start 8 picks</button>
-    <div><div class="note">Find:</div><div id="trialTarget">–</div></div>
-    <div><label for="trialSel">Dropdown</label><select id="trialSel" disabled></select></div>
-  </div>
-  <div class="note" id="trialLog" style="margin-top:8px"></div>
-  <svg class="chart" id="chart3" viewBox="0 0 1000 220" role="img" aria-label="Your pick times against list position"></svg>
-  <label class="toggle"><input type="checkbox" id="useMine" disabled> Use my measured slope in section 1 instead of the model</label>
-</section>
-
-<section id="s4">
-  <h2>How the numbers are made</h2>
-  <h3>Scroll tax per pick <span class="tag model">MODEL</span></h3>
-  <div class="eq" id="eqBlock">tax(i) = Σ_mode share_mode · [ T_mode(i) − T_mode(1) ]
-
-mouse:    T(i) = max(0, i − V) / R  +  b · log2(min(i, V) + 1)
-          (scroll the rows hidden below the popup, then a Fitts'-law point at a row)
-keyboard: T(i) = k(i) · K
-          k(i) = fewest letters typed before the browser's type-ahead lands on entry i
-touch:    T(i) = (i − 1) · c
-          (scroll-wheel picker on phones; distance-proportional)
-autofill: T(i) = 0
-
-lifetime  = tax(i) · picks per year · form-filling years
-everyone  = tax(i) · picks per year · population</div>
-  <p class="note">Only the part of the time that depends on position counts as the tax. Opening the menu, reading the label and clicking cost the same for Alabama and Wyoming, so they cancel. The range shown under the lifetime number moves every estimate to its low and high end at once.</p>
-
-  <h3>Waiting tax <span class="tag model">MODEL</span></h3>
-  <div class="eq">extra commute per lifetime = (m_state − m_min) · 2 trips · commuting days per year · working years
-fit line: m = a + b · log10(density)   (ordinary least squares over 50 states + DC + Puerto Rico)</div>
-
-  <h3>Every input</h3>
-  <div class="tablewrap"><table id="srcTable"><thead><tr><th>Input</th><th>Value</th><th>Kind</th><th>Source or reasoning</th></tr></thead><tbody></tbody></table></div>
-
-  <h3>What this leaves out</h3>
-  <ul class="note">
-    <li>Many sites pin the United States, Canada or the UK to the top of country lists, or use a search box. Tick "site pins my choice" to see that case.</li>
-    <li>Type-ahead is modelled as typing a prefix. Pressing the same first letter repeatedly to cycle through entries is another real strategy and is not modelled.</li>
-    <li>Visible rows default to 20, the popup limit in Chromium's source. Safari and Chrome on macOS show a native menu that fits as many rows as the screen allows, so try 40 for a Mac.</li>
-    <li>World Bank population has no Taiwan figure and nothing for most small territories, so "everyone there" is blank for those.</li>
-    <li>Commute times are state averages for workers who did not work from home. Within a state the spread between a rural and a city commute is wider than the spread between states.</li>
+<div class="notice">This is not an official website of any government or organization. It is an art piece. No information you enter leaves this page.</div>
+<header><span class="seal">Office of Dropdown Time Accounting</span><span class="sub">Division of Alphabetical Position Statistics</span></header>
+<div class="crumbs"><a href="#top">Home</a> › <a href="#top">Forms &amp; Publications</a> › <a href="#top">Personal Liability Estimates</a> › Form DTT-__NUM__</div>
+<div class="wrap" id="top">
+<nav aria-label="Sections">
+  <h4>On this page</h4>
+  <ul>
+    <li><a href="#step1">Step 1. Speed test</a></li>
+    <li><a href="#step2">Step 2. U.S. state</a></li>
+    <li><a href="#step3">Step 3. Country</a></li>
+    <li><a href="#step4">Step 4. Country and city</a></li>
+    <li><a href="#statement">Statement of liability</a></li>
+    <li><a href="#notes">Technical notes</a></li>
+    <li><a href="#sources">Data sources</a></li>
   </ul>
-</section>
-<p class="note">Built for Hanji's Art Insights series. Data as of the sources listed; model and estimates documented above.</p>
+  <h4>Related</h4>
+  <ul>
+    <li><a href="#notes-assume">Assumptions table</a></li>
+    <li><a href="#notes-limits">Limitations</a></li>
+  </ul>
+</nav>
+<main>
+<h1>Dropdown Time Tax: Lifetime Selection Time Estimate</h1>
+<div class="formno">Form DTT-__NUM__ · Art Insights series · Estimated completion time: 3 minutes · <span class="req">*</span> required</div>
+<p class="intro">Residents whose place of residence appears near the top of an alphabetical dropdown menu (for example, Alaska, the second U.S. state) spend less time selecting it than residents near the bottom (for example, Wyoming). This form measures how fast you select from a dropdown, then estimates the time your position in the alphabet costs you over a lifetime. Complete Step 1 first. Steps 2 to 4 use your measured speed.</p>
+
+<h2 id="step1">Step 1. Selection speed test</h2>
+<fieldset>
+  <legend>Timed selection <span class="req">*</span></legend>
+  <p>Select <b>Begin test</b>. A country name will appear. Find it in the dropdown as quickly as you can, using whatever method you normally use (mouse, trackpad, keyboard, or touch). There are 8 names, spread from the top of the list to the bottom.</p>
+  <div class="field"><button type="button" id="trialStart">Begin test</button> &nbsp; Find: <span id="trialTarget">—</span> &nbsp; <span class="small" id="trialCount"></span></div>
+  <div class="field"><label for="trialSel">Country</label><br><select id="trialSel" disabled><option>Select…</option></select></div>
+  <div class="tablewrap"><table id="trialTable" hidden><thead><tr><th class="n">Trial</th><th>Entry</th><th class="n">Position</th><th class="n">Time (s)</th></tr></thead><tbody></tbody></table></div>
+  <div class="status" id="speedStatus">Not yet tested. Until you finish the test, Steps 2 to 4 use the default estimate of <b>35 ms per row</b>.</div>
+</fieldset>
+
+<h2 id="step2">Step 2. U.S. state</h2>
+<fieldset>
+  <legend>State of residence</legend>
+  <div class="field"><label for="selState">State or district</label><br><select id="selState"></select>
+    <div class="help">50 states and the District of Columbia, alphabetical. Your selection is timed.</div></div>
+  <div id="outState"></div>
+</fieldset>
+
+<h2 id="step3">Step 3. Country</h2>
+<fieldset>
+  <legend>Country of residence</legend>
+  <div class="field"><label for="selCountry">Country</label><br><select id="selCountry"></select>
+    <div class="help">ISO 3166-1, 249 entries, alphabetical. Your selection is timed.</div></div>
+  <div id="outCountry"></div>
+</fieldset>
+
+<h2 id="step4">Step 4. Country and city</h2>
+<fieldset>
+  <legend>Country and city of residence</legend>
+  <div class="field"><label for="selCountry2">Country</label><br><select id="selCountry2"></select></div>
+  <div class="field"><label for="selCity">City</label><br><select id="selCity" disabled><option>Select a country first</option></select>
+    <div class="help" id="cityHelp">All places with a population of 15,000 or more, alphabetical. Your selection is timed.</div></div>
+  <div id="outCity"></div>
+</fieldset>
+
+<h2 id="statement">Statement of lifetime dropdown liability</h2>
+<div class="statement" id="statementBox"><p class="small">Complete Steps 1 to 4 to generate your statement.</p></div>
+
+<h2 id="notes">Technical notes</h2>
+<div class="notes">
+<h3>1. Purpose and scope</h3>
+<p>This form estimates the additional time a person spends selecting a place of residence from an alphabetically ordered dropdown menu (an HTML <i>select</i> element) because of that place's position in the list. Only the position-dependent part of each selection is counted. Time spent opening the menu, reading the field label, and confirming the choice is the same for the first and the last entry and is excluded. Estimates are illustrative. They are computed from your own measured selection speed and from published lists and population counts, combined with usage assumptions that are stated in Section 5 and are not drawn from any survey.</p>
+<h3>2. Measurement of selection speed (Step 1)</h3>
+<p>The speed test presents 8 target names drawn from the 249-entry country list used in Step 3. Trial <i>j</i> (j = 1, …, 8) draws its target at random from the <i>j</i>-th eighth of the list, so the targets span positions near the top through near the bottom. The timer starts when the target name is displayed and stops when the matching entry is selected; selecting a wrong entry does not stop the timer. For each trial the page records the target position <i>i</i> (counting the first real entry as 1) and the elapsed time <i>t</i> in seconds, measured with the browser's high-resolution clock (performance.now). An ordinary least-squares line t = a + b·i is fitted to the 8 points. The slope <i>b</i>, in seconds per row, is your selection speed; the intercept <i>a</i> absorbs reading the target, opening the menu, and confirming. A negative slope is set to zero. The correlation coefficient <i>r</i> is reported as a check on fit quality. Users who select by typing the first letters of an entry (browser type-ahead) typically produce a slope near zero, which correctly implies that list position costs them almost nothing. If the test is not completed, a default slope of 35 ms per row is used. The default is an estimate derived from an earlier mixed-method model of this series (40% mouse with 20 visible rows and a 12 rows/s wheel scroll, 8% keyboard type-ahead, 37% touch picker at 0.03 s per row, 15% browser autofill), which gave about 1.8 s for the 51st entry of the state list relative to the 1st, i.e. about 36 ms per row.</p>
+<h3>3. Computation of the per-selection tax</h3>
+<p>For an entry at position <i>i</i> in a list, the per-selection tax is τ = b·(i − 1) seconds, the predicted extra time relative to the first entry in the same list. For Step 4, the tax is the sum of the country term and the city term, τ = b·(i<sub>country</sub> − 1) + b·(i<sub>city</sub> − 1), because the user must select both. The same measured slope is applied to every list. Lists longer than the test list (for example, the 3,407 U.S. cities in Step 4) are an extrapolation beyond the measured range; see Section 6. Each step also reports the time you actually took for that selection, measured from first pointer or key contact with the menu to the change of value, and the time predicted by your fitted line (a + b·i) for comparison.</p>
+<h3>4. Computation of lifetime and population totals</h3>
+<p>Lifetime liability is L = τ · n · Y, where <i>n</i> is the number of selections of that kind per year and <i>Y</i> is the number of form-filling years (Section 5). Annual population liability is P = τ · n · N, where <i>N</i> is the resident population of the selected place. P is summed person-time and is reported in years when large. The comparison figures in each step (Alaska and Wyoming; Afghanistan and Zimbabwe, which are the first and last entries in the country list as sorted here) use the same formula and the same slope.</p>
+<h3 id="notes-assume">5. Assumptions</h3>
+<p>The values below may be changed. Results update immediately. Values marked "estimate" have no survey source and are the author's assumptions.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Symbol</th><th>Quantity</th><th class="n">Value</th><th>Basis</th></tr></thead>
+<tbody>
+<tr><td>n<sub>s</sub></td><td>State dropdown selections per year</td><td class="n"><input type="number" id="nState" min="0" max="500" step="1" value="12"></td><td>Estimate. About one per month (checkout, shipping, sign-up, tax and benefit forms).</td></tr>
+<tr><td>n<sub>c</sub></td><td>Country dropdown selections per year</td><td class="n"><input type="number" id="nCountry" min="0" max="500" step="1" value="6"></td><td>Estimate. International sites, travel bookings, app sign-ups.</td></tr>
+<tr><td>n<sub>cc</sub></td><td>Country-and-city selections per year</td><td class="n"><input type="number" id="nCity" min="0" max="500" step="1" value="2"></td><td>Estimate. Less common; many sites use a free-text city field instead.</td></tr>
+<tr><td>Y</td><td>Form-filling years</td><td class="n"><input type="number" id="nYears" min="1" max="100" step="1" value="62"></td><td>U.S. life expectancy at birth, 78.4 years in 2023 (CDC NCHS Data Brief 521), less about 16 years before a person fills in forms independently. Estimate.</td></tr>
+<tr><td>b<sub>0</sub></td><td>Default slope if Step 1 is skipped</td><td class="n"><input type="number" id="bDefault" min="0" max="500" step="1" value="35"> ms</td><td>Estimate; see Section 2.</td></tr>
+</tbody></table></div>
+<h3>6. Lists and ordering</h3>
+<p>Step 2 lists the 50 states and the District of Columbia by full name. Territories are excluded; adding American Samoa would move every entry after "Alaska" down one place but would not change Alaska's position. Step 1 and Step 3 list the 249 entries of ISO 3166-1, using the ISO short name, or the ISO common name where one is defined (for example "Bolivia", "Iran", "Taiwan"). Step 4 lists, for the selected country, every populated place in the GeoNames <i>cities15000</i> extract (population 15,000 or more). Where two places in the same list share a name, the U.S. state code or the place's population is appended to distinguish them. All lists are sorted with the browser's English collation (Intl.Collator, base sensitivity), so "Åland Islands" sorts with A; another sort order would shift positions slightly. Live sites vary: some place the United States or another country first, some use search boxes or autocomplete, and some sort by postal code (in which case Alaska, AK, is first and Wyoming, WY, is still last). Those designs change the result and are not modelled.</p>
+<h3 id="notes-limits">7. Limitations</h3>
+<p>(a) The linear model assumes each additional row costs the same time. Mouse users scroll only past rows hidden below the open menu (about 20 in Chromium-based browsers on Windows and Linux), so the true cost is lower near the top of a list and higher further down; the fitted slope averages over this. (b) Eight trials give an imprecise slope; a single slow trial can move it noticeably. Repeat the test to check. (c) For lists much longer than 249 entries, people usually switch strategy (type-ahead, browser find, or giving up and typing in a free-text field), so the Step 4 city figures overstate the cost for very long lists. They are the time you would spend if you kept scrolling at your measured rate. (d) Selection counts per year are assumptions, and the lifetime figure is proportional to them. (e) Population figures differ in date and definition between sources (Section 8). (f) Times are reported as continuous clock time: "2 hours" means 2 hours of selecting summed over a lifetime.</p>
+<h3 id="sources">8. Data sources</h3>
+<p>U.S. state and District of Columbia resident population: U.S. Census Bureau, 2020 Census, "Population Density of the 50 States, the District of Columbia, and Puerto Rico: 1910 to 2020" (apportionment release, April 2021). Country list: ISO 3166-1 as distributed in the <i>pycountry</i> package. Country population: World Bank, World Development Indicators, indicator SP.POP.TOTL, latest year available (2025), via the <i>datasets/population</i> repository; no figure is published for Taiwan and many small territories, which are shown as "not available". City list and city population: GeoNames (geonames.org), <i>cities15000</i> extract as distributed in the <i>geonamescache</i> package version __GNC_VER__, licensed CC BY 4.0; GeoNames populations come from mixed census years and should be read as approximate. U.S. life expectancy: National Center for Health Statistics, "Mortality in the United States, 2023", Data Brief No. 521 (December 2024). Chromium visible-row limit: kMaxVisibleRows = 20, Chromium popup menu source. The page has no network access; all data are embedded.</p>
+</div>
 </main>
+</div>
+<footer>Form DTT-__NUM__ · Part of Art Insights by Hanji Xu · Page last reviewed: __DATE__ · <a href="#top">Back to top</a></footer>
 
 <script>
 "use strict";
-// ---------- DATA ----------
-// [name, postal, 2020 resident pop, 2020 density per sq mi land, ACS 2023 1-yr mean one-way commute minutes, territory flag]
-// Population and density: US Census Bureau, "Population Density of the 50 States, DC and Puerto Rico: 1910 to 2020".
-// Commute: ACS 2023 1-year, mean travel time to work (S0801), as tabulated round-trip by JetPunk (halved here).
+// [name, postal, 2020 resident population]
 const STATES = __STATES__;
-const TERR = [ // other inhabited territories, for the 56-entry list only (Puerto Rico is in STATES with its data)
-  ["American Samoa","AS"],["Guam","GU"],["Northern Mariana Islands","MP"],["U.S. Virgin Islands","VI"]];
-// [ISO short or common name (pycountry), alpha-2, World Bank SP.POP.TOTL latest (2025) or null]
+// [ISO short or common name, alpha-2, World Bank population or null]
 const COUNTRIES = __COUNTRIES__;
+// alpha-2 -> [[name, population, US state code or ""], ...]  (GeoNames cities15000)
+const CITIES = __CITIES__;
 
-// ---------- PARAMETERS ----------
-const P = {
-  picks:   {v:12,  lo:4,   hi:40,  min:1,  max:100, step:1,    unit:"per year", label:"Dropdown picks of your location", kind:"est",
-            why:"Checkouts, sign-ups, shipping and tax forms. No survey measures this; 1 per month is a guess."},
-  years:   {v:62,  lo:55,  hi:66,  min:20, max:80,  step:1,    unit:"years", label:"Form-filling years", kind:"est",
-            why:"US life expectancy at birth 78.4 (CDC NCHS, 2023) minus roughly the first 16 years."},
-  V:       {v:20,  lo:20,  hi:20,  min:5,  max:60,  step:1,    unit:"rows", label:"Visible rows in the open menu", kind:"data",
-            why:"kMaxVisibleRows = 20 in Chromium's popup source. macOS native menus show more."},
-  R:       {v:12,  lo:20,  hi:7,   min:3,  max:40,  step:1,    unit:"rows/s", label:"Mouse-wheel scroll speed", kind:"est",
-            why:"Windows default is 3 rows per wheel notch; about 4 notches per second including slowing to stop. Our estimate."},
-  b:       {v:0.15,lo:0.10,hi:0.20,min:0.05,max:0.4, step:0.01, unit:"s/bit", label:"Fitts' law slope (mouse)", kind:"est",
-            why:"Mouse pointing studies typically report 0.1 to 0.2 s per bit (MacKenzie 1992)."},
-  K:       {v:0.28,lo:0.20,hi:0.28,min:0.08,max:1.2, step:0.01, unit:"s/key", label:"Time per keystroke", kind:"data",
-            why:"Keystroke-Level Model: 0.28 s for an average 40 wpm typist (Card, Moran & Newell 1980)."},
-  c:       {v:0.03,lo:0.015,hi:0.06,min:0.005,max:0.15,step:0.005,unit:"s/row", label:"Touch picker cost per row", kind:"est",
-            why:"Flicking an iOS/Android wheel covers many rows fast, then you nudge. Our estimate."},
-  sMouse:  {v:40,  lo:40,  hi:40,  min:0,  max:100, step:1,    unit:"%", label:"Share of picks by mouse/trackpad", kind:"est",
-            why:"Desktop is 48% of US web traffic (StatCounter, Sept 2026); split here into mouse and keyboard."},
-  sKey:    {v:8,   lo:8,   hi:8,   min:0,  max:100, step:1,    unit:"%", label:"Share by keyboard type-ahead", kind:"est",
-            why:"A minority of desktop users type into selects. Guess."},
-  sTouch:  {v:37,  lo:37,  hi:37,  min:0,  max:100, step:1,    unit:"%", label:"Share by touch picker", kind:"est",
-            why:"Mobile is 49% of US web traffic (StatCounter, Sept 2026), less what autofill handles."},
-  sAuto:   {v:15,  lo:15,  hi:15,  min:0,  max:100, step:1,    unit:"%", label:"Share filled by browser autofill", kind:"est",
-            why:"Autofill skips the dropdown entirely. No public usage figure; guess."},
-  days:    {v:230, lo:200, hi:250, min:50, max:300, step:5,    unit:"days/yr", label:"Commuting days per year", kind:"est",
-            why:"About 250 workdays less holidays, sick days and some remote days."},
-  wyears:  {v:40,  lo:35,  hi:45,  min:5,  max:55,  step:1,    unit:"years", label:"Working years", kind:"est",
-            why:"Roughly ages 22 to 62."}
-};
-let mySlope = null; // s/row, from calibration
-
-// ---------- HELPERS ----------
 const $ = s => document.querySelector(s);
 const coll = new Intl.Collator("en", {sensitivity:"base"});
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmtInt = n => Math.round(n).toLocaleString("en-US");
 function fmtDur(sec){
   const a = Math.abs(sec);
-  if (a < 1) return (sec).toFixed(2)+" s";
-  if (a < 90) return sec.toFixed(1)+" s";
-  if (a < 5400) return (sec/60).toFixed(a<600?1:0)+" min";
-  if (a < 86400*3) return (sec/3600).toFixed(a<36000?1:0)+" h";
-  if (a < 86400*365*2) return (sec/86400).toFixed(0)+" days";
-  return (sec/86400/365.25).toFixed(1)+" years";
-}
-function fmtInt(n){ return n.toLocaleString("en-US"); }
-function fmtSig(n){ return n >= 100 ? fmtInt(Number(n.toPrecision(2))) : n.toFixed(n < 10 ? 1 : 0); }
-function esc(s){ return String(s).replace(/[&<>"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch])); }
-
-// ---------- LISTS ----------
-function buildList(kind){
-  let items;
-  if (kind === "iso"){
-    items = COUNTRIES.map(c => ({name:c[0], code:c[1], pop:c[2]}));
-    items.sort((a,b)=>coll.compare(a.name,b.name));
-  } else {
-    items = STATES.filter(s => (kind === "usTerr" || !s[5]) && (kind !== "us50" || s[1] !== "DC"))
-      .map(s => ({name:s[0], code:s[1], pop:s[2], dens:s[3], comm:s[4]}));
-    if (kind === "usTerr") TERR.forEach(t => items.push({name:t[0], code:t[1], pop:null}));
-    if (kind === "usAbbr"){ items.sort((a,b)=>a.code.localeCompare(b.code)); items.forEach(it => it.label = it.code); }
-    else items.sort((a,b)=>coll.compare(a.name,b.name));
-  }
-  items.forEach(it => { if (!it.label) it.label = it.name; });
-  // type-ahead keystrokes: shortest prefix whose first match (in list order) is this item
-  const lower = items.map(it => it.label.toLowerCase());
-  items.forEach((it, i) => {
-    const s = lower[i]; let k = s.length;
-    for (let n = 1; n <= s.length; n++){
-      const pre = s.slice(0, n);
-      if (lower.findIndex(x => x.startsWith(pre)) === i){ k = n; break; }
-    }
-    it.keys = k;
-  });
-  return items;
+  if (a === 0) return "0 s";
+  if (a < 0.01) return "< 0.01 s";
+  if (a < 10) return sec.toFixed(2) + " s";
+  if (a < 90) return sec.toFixed(0) + " s";
+  if (a < 5400) return (sec/60).toFixed(a < 600 ? 1 : 0) + " min";
+  if (a < 86400*3) return (sec/3600).toFixed(a < 36000 ? 1 : 0) + " h";
+  if (a < 86400*365*2) return fmtInt(sec/86400) + " days";
+  return (sec/86400/365.25).toLocaleString("en-US", {maximumFractionDigits: sec > 86400*365*100 ? 0 : 1}) + " years";
 }
 
-// ---------- MODEL ----------
-function val(key, mode){ const p = P[key]; return mode === "lo" ? p.lo : mode === "hi" ? p.hi : p.v; }
-function perPick(i, keys, keys1, mode){ // i is 1-based position; returns seconds of tax vs position 1
-  if (mySlope !== null && $("#useMine").checked) return Math.max(0, mySlope * (i - 1));
-  const V = val("V",mode), R = val("R",mode), b = val("b",mode), K = val("K",mode), c = val("c",mode);
-  const sum = P.sMouse.v + P.sKey.v + P.sTouch.v + P.sAuto.v || 1;
-  const mouse = (Math.max(0, i - V) / R + b * Math.log2(Math.min(i, V) + 1)) - (b * Math.log2(2));
-  const key = (keys - keys1) * K;
-  const touch = (i - 1) * c;
-  return (P.sMouse.v*mouse + P.sKey.v*key + P.sTouch.v*touch) / sum;
+// ---------- lists ----------
+const stateList = STATES.map(s => ({label:s[0], code:s[1], pop:s[2]})).sort((a,b) => coll.compare(a.label,b.label));
+const countryList = COUNTRIES.map(c => ({label:c[0], code:c[1], pop:c[2]})).sort((a,b) => coll.compare(a.label,b.label));
+const cityCache = {};
+function cityList(code){
+  if (cityCache[code]) return cityCache[code];
+  const raw = (CITIES[code] || []).map(c => ({label:c[0], pop:c[1], st:c[2]}));
+  const count = {};
+  raw.forEach(c => count[c.label.toLowerCase()] = (count[c.label.toLowerCase()] || 0) + 1);
+  raw.forEach(c => { if (count[c.label.toLowerCase()] > 1) c.label += c.st ? ` (${c.st})` : ` (pop. ${fmtInt(c.pop)})`; });
+  // still-duplicate labels (same name, same state): add population
+  const c2 = {}; raw.forEach(c => c2[c.label] = (c2[c.label] || 0) + 1);
+  raw.forEach(c => { if (c2[c.label] > 1) c.label += ` (pop. ${fmtInt(c.pop)})`; });
+  raw.sort((a,b) => coll.compare(a.label,b.label));
+  return cityCache[code] = raw;
 }
-function lifetime(t, mode){ return t * val("picks",mode) * val("years",mode); }
-
-// ---------- STATE ----------
-let list = [], current = null;
-function populate(){
-  const kind = $("#listKind").value;
-  list = buildList(kind);
-  $("#pinWrap").style.display = "flex";
-  const sel = $("#pick"), prev = current ? current.code : null;
-  sel.innerHTML = '<option value="">Select…</option>' + list.map((it, i) => `<option value="${i}">${esc(it.label)}</option>`).join("");
-  let idx = list.findIndex(it => it.code === prev);
-  if (idx < 0) idx = list.findIndex(it => it.code === (kind === "iso" ? "US" : "AK"));
-  current = list[Math.max(0, idx)];
-  sel.value = String(list.indexOf(current));
-  render();
-}
-function positionOf(it){
-  if ($("#pinTop").checked) return 1;
-  return list.indexOf(it) + 1;
-}
-function render(){
-  if (!current) return;
-  const i = positionOf(current), n = list.length, k1 = list[0].keys;
-  const keysHere = $("#pinTop").checked ? 1 : current.keys;
-  const t = perPick(i, keysHere, k1, "mid");
-  const L = lifetime(t,"mid"), Llo = lifetime(perPick(i,keysHere,k1,"lo"),"lo"), Lhi = lifetime(perPick(i,keysHere,k1,"hi"),"hi");
-  $("#oPos").innerHTML = `#${i} <small>of ${n}</small>`;
-  $("#oPosS").textContent = `${esc(current.name)} · type-ahead needs ${keysHere} key${keysHere>1?"s":""}`;
-  $("#oPer").textContent = fmtDur(t);
-  $("#oLife").textContent = fmtDur(L);
-  const mine = (mySlope!==null && $("#useMine").checked);
-  $("#oLifeS").textContent = mine ? "using your measured slope" : `range ${fmtDur(Math.min(Llo,Lhi))} to ${fmtDur(Math.max(Llo,Lhi))}`;
-  if (current.pop){
-    const yr = t * val("picks","mid") * current.pop;
-    $("#oPop").textContent = fmtDur(yr);
-    $("#oPopS").textContent = `${fmtInt(current.pop)} people × ${P.picks.v} picks × ${fmtDur(t)}`;
-  } else { $("#oPop").textContent = "n/a"; $("#oPopS").textContent = "no population figure in the source"; }
-
-  // verdict
-  const last = list[n-1], lastT = perPick(n, last.keys, k1, "mid");
-  const second = list[1];
-  let v;
-  const saved = lifetime(lastT - t,"mid");
-  if (i <= 2) v = `${current.name} is at the top. Compared with ${last.name} at the bottom, you save about ${fmtDur(saved)} over a lifetime.` +
-      (saved < 3600 ? ` Real, but closer to a long lunch than to "hours".` : ` In a list this long the alphabet really does cost hours.`);
-  else if (i === n) v = `Dead last. ${current.name} pays the full tax: about ${fmtDur(L)} over a lifetime, versus ${fmtDur(lifetime(perPick(2,second.keys,k1,"mid"),"mid"))} for ${second.name}.`;
-  else v = `${current.name} sits ${Math.round(100*(i-1)/(n-1))}% of the way down. Your lifetime bill is about ${fmtDur(L)}; the bottom entry, ${last.name}, pays ${fmtDur(lifetime(lastT,"mid"))}.`;
-  if ($("#listKind").value === "iso" && current.code === "US" && !$("#pinTop").checked)
-    v += ` This is the real "hours" case: a US resident hunting for "United States" near the bottom of a 249-row country list pays far more than any state difference.`;
-  $("#verdict1").textContent = v;
-  drawChart1(k1);
-  renderWait();
+function fill(sel, list, placeholder){
+  sel.innerHTML = `<option value="">${placeholder}</option>` + list.map((it,i) => `<option value="${i}">${esc(it.label)}</option>`).join("");
 }
 
-// ---------- CHART 1 ----------
-function drawChart1(k1){
-  const svg = $("#chart1"), W = 1000, H = 240, padL = 50, padB = 28, padT = 16;
-  const pin = $("#pinTop").checked;
-  const vals = list.map((it, j) => lifetime(perPick(j+1, it.keys, k1, "mid"),"mid"));
-  const max = Math.max(...vals, 1);
-  const unit = max > 7200 ? 3600 : 60, uname = unit === 3600 ? "h" : "min";
-  const bw = (W - padL - 10) / list.length;
-  let g = "";
-  const ticks = 4;
-  for (let t = 0; t <= ticks; t++){
-    const y = H - padB - (H - padB - padT) * t / ticks;
-    g += `<line x1="${padL}" x2="${W-10}" y1="${y}" y2="${y}" stroke="var(--line)"/>`;
-    g += `<text x="${padL-6}" y="${y+4}" text-anchor="end">${(max*t/ticks/unit).toFixed(max/unit<10?1:0)}</text>`;
-  }
-  g += `<text x="12" y="${padT+2}" transform="rotate(-90 12 ${padT+2})" text-anchor="end">lifetime ${uname}</text>`;
-  const curIdx = list.indexOf(current);
-  list.forEach((it, j) => {
-    const h = (H - padB - padT) * vals[j] / max;
-    const x = padL + j * bw;
-    const hot = j === curIdx && !pin;
-    g += `<rect x="${x+0.5}" y="${H-padB-h}" width="${Math.max(bw-1,0.8)}" height="${Math.max(h,0.5)}" fill="${hot?"var(--accent)":"var(--bar)"}"><title>#${j+1} ${esc(it.label)}: ${fmtDur(vals[j])}</title></rect>`;
-  });
-  const mark = (j, txt) => { const x = padL + j*bw + bw/2; return `<text class="lab" x="${x}" y="${H-padB+16}" text-anchor="${j<3?"start":j>list.length-4?"end":"middle"}">${esc(txt)}</text>`; };
-  g += mark(0, list[0].label) + mark(list.length-1, list[list.length-1].label);
-  if (curIdx > 2 && curIdx < list.length-3 && !pin) g += mark(curIdx, current.label);
-  const ak = list.findIndex(it => it.code === "AK");
-  if (ak >= 0 && ak !== 0) { const x = padL + ak*bw + bw/2; g += `<text class="lab" x="${x+4}" y="${H-padB-8}" fill="var(--cool)">← Alaska</text>`; }
-  svg.innerHTML = g;
-}
-
-// ---------- WAITING ----------
-function regress(xs, ys){
-  const n = xs.length, mx = xs.reduce((a,b)=>a+b)/n, my = ys.reduce((a,b)=>a+b)/n;
-  let sxy=0, sxx=0, syy=0;
-  for (let i=0;i<n;i++){ sxy+=(xs[i]-mx)*(ys[i]-my); sxx+=(xs[i]-mx)**2; syy+=(ys[i]-my)**2; }
-  const b = sxy/sxx; return {a: my - b*mx, b, r: sxy/Math.sqrt(sxx*syy)};
-}
-const WAIT = STATES.filter(s => s[4] != null);
-function renderWait(){
-  const box = $("#waitBox");
-  const min = WAIT.reduce((a,s)=> s[4] < a[4] ? s : a);
-  const factor = 2 * P.days.v * P.wyears.v * 60; // minutes-per-trip -> seconds per lifetime
-  const st = current && current.comm != null ? current : null;
-  const ak = WAIT.find(s => s[1]==="AK");
-  if (!st){
-    box.innerHTML = `<p class="note">Commute data covers US states, DC and Puerto Rico. Pick a US state above to see your waiting tax.</p>`;
-    $("#verdict2").textContent = "";
-  } else {
-    const extra = (st.comm - min[4]) * factor;
-    const scrollL = lifetime(perPick(positionOf(st), st.keys, list[0].keys, "mid"),"mid");
-    box.innerHTML = `<div class="stats">
-      <div class="stat"><div class="k">Mean one-way commute <span class="tag data">DATA</span></div><div class="v">${st.comm.toFixed(1)} <small>min</small></div><div class="s">${esc(st.name)}, ACS 2023</div></div>
-      <div class="stat"><div class="k">Density <span class="tag data">DATA</span></div><div class="v">${st.dens.toLocaleString("en-US")} <small>/ sq mi</small></div><div class="s">2020 Census</div></div>
-      <div class="stat"><div class="k">Lifetime extra vs ${esc(min[0])} <span class="tag est">EST</span></div><div class="v">${fmtDur(extra)}</div><div class="s">${(st.comm-min[4]).toFixed(1)} min × 2 × ${P.days.v} days × ${P.wyears.v} yrs, as round-the-clock time</div></div>
-      <div class="stat"><div class="k">Waiting tax ÷ scroll tax</div><div class="v">${scrollL > 1 ? "≈ "+fmtSig(extra/scrollL)+"×" : "∞"}</div><div class="s">${scrollL > 1 ? "how many dropdown lifetimes fit in your extra commute" : "your scroll tax is zero"}</div></div>
-    </div>`;
-    const akExtra = (ak[4]-min[4])*factor;
-    $("#verdict2").textContent = st.code === "AK"
-      ? `Alaska wins the dropdown but not the road: ${ak[4].toFixed(1)} minutes each way is ${(ak[4]-min[4]).toFixed(1)} more than ${min[0]}, worth about ${fmtDur(akExtra)} over a working life. The dropdown advantage is a rounding error next to it.`
-      : `Your commute differs from ${min[0]}'s by ${(st.comm-min[4]).toFixed(1)} minutes a trip. Over a working life that is ${fmtDur(extra)}, against a scroll tax of ${fmtDur(scrollL)}. Where you live on the map matters roughly ${scrollL>1?fmtSig(extra/scrollL):"infinitely many"} times more than where you live in the alphabet.`;
-  }
-  drawChart2();
-}
-function drawChart2(){
-  const svg = $("#chart2"), W = 1000, H = 360, pl = 56, pr = 16, pt = 16, pb = 40;
-  const xs = WAIT.map(s => Math.log10(s[3])), ys = WAIT.map(s => s[4]);
-  const fit = regress(xs, ys);
-  const x0 = 0, x1 = 4.2, y0 = 16, y1 = 35;
-  const X = x => pl + (x - x0) / (x1 - x0) * (W - pl - pr), Y = y => H - pb - (y - y0) / (y1 - y0) * (H - pt - pb);
-  let g = "";
-  [1,10,100,1000,10000].forEach(d => { const x = X(Math.log10(d)); g += `<line x1="${x}" x2="${x}" y1="${pt}" y2="${H-pb}" stroke="var(--line)"/><text x="${x}" y="${H-pb+16}" text-anchor="middle">${fmtInt(d)}</text>`; });
-  [18,22,26,30,34].forEach(m => { const y = Y(m); g += `<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${pl-6}" y="${y+4}" text-anchor="end">${m}</text>`; });
-  g += `<text x="${(pl+W)/2}" y="${H-6}" text-anchor="middle">people per square mile of land (log scale)</text>`;
-  g += `<text x="14" y="${pt}" transform="rotate(-90 14 ${pt})" text-anchor="end">one-way commute, min</text>`;
-  g += `<line x1="${X(0)}" y1="${Y(fit.a)}" x2="${X(x1)}" y2="${Y(fit.a+fit.b*x1)}" stroke="var(--model)" stroke-width="2" stroke-dasharray="6 4"/>`;
-  const curCode = current && current.comm != null ? current.code : null;
-  WAIT.forEach(s => {
-    const hot = s[1] === curCode, x = X(Math.log10(s[3])), y = Y(s[4]);
-    g += `<circle cx="${x}" cy="${y}" r="${hot?7:4.5}" fill="${hot?"var(--accent)":s[1]==="AK"?"var(--cool)":"var(--bar)"}" stroke="var(--panel)" stroke-width="1"><title>${esc(s[0])}: ${s[3]}/sq mi, ${s[4].toFixed(1)} min</title></circle>`;
-    if (hot || ["AK","NY","DC","SD","NJ","WY","MD"].includes(s[1])) g += `<text class="lab" x="${x+8}" y="${y+4}">${s[1]}</text>`;
-  });
-  svg.innerHTML = g;
-  $("#fitNote").innerHTML = `Dashed line, <span class="tag model">MODEL</span>: commute ≈ ${fit.a.toFixed(1)} + ${fit.b.toFixed(1)} × log10(density) minutes, r = ${fit.r.toFixed(2)} across ${WAIT.length} places. Each tenfold rise in density goes with about ${fit.b.toFixed(1)} more minutes per trip. Correlation, not cause: dense states also have bigger metros, transit and longer distances to job centers.`;
-}
-
-// ---------- TIMING THE REAL PICK ----------
-let openAt = null;
-$("#pick").addEventListener("pointerdown", () => { if (openAt === null) openAt = performance.now(); });
-$("#pick").addEventListener("keydown", () => { if (openAt === null) openAt = performance.now(); });
-$("#pick").addEventListener("change", e => {
-  const v = e.target.value; if (v === "") return;
-  current = list[+v];
-  if (openAt !== null){
-    const dt = (performance.now() - openAt) / 1000;
-    $("#timing").innerHTML = `<span class="tag you">YOU</span> That pick took you <b>${dt.toFixed(2)} s</b> from first touch to choice (position #${(+v)+1}).`;
-  }
-  openAt = null;
-  render();
+// ---------- assumptions ----------
+const A = () => ({
+  nState: +$("#nState").value || 0, nCountry: +$("#nCountry").value || 0, nCity: +$("#nCity").value || 0,
+  Y: +$("#nYears").value || 0, b0: (+$("#bDefault").value || 0) / 1000
 });
-$("#pick").addEventListener("blur", () => { openAt = null; });
-$("#listKind").addEventListener("change", () => { mySlope = null; $("#useMine").checked = false; $("#useMine").disabled = true; populate(); resetTrials(); });
-$("#pinTop").addEventListener("change", render);
-$("#useMine").addEventListener("change", render);
+let fit = null; // {a, b, r}
+const slope = () => fit ? fit.b : A().b0;
 
-// ---------- KNOBS + SOURCE TABLE ----------
-function buildKnobs(){
-  const box = $("#knobs"); box.innerHTML = "";
-  Object.entries(P).forEach(([key, p]) => {
-    const d = document.createElement("div"); d.className = "knob";
-    d.innerHTML = `<label for="k_${key}">${esc(p.label)} <span class="tag ${p.kind}">${p.kind==="data"?"DATA":"EST"}</span></label>
-      <input type="range" id="k_${key}" min="${p.min}" max="${p.max}" step="${p.step}" value="${p.v}">
-      <div class="val" id="kv_${key}">${p.v} ${esc(p.unit)}</div><div class="why">${esc(p.why)}</div>`;
-    box.appendChild(d);
-    d.querySelector("input").addEventListener("input", e => { p.v = +e.target.value; $("#kv_"+key).textContent = `${p.v} ${p.unit}`; render(); buildTable(); });
-  });
+// ---------- speed test ----------
+let trials = [], target = null, tStart = 0;
+function regress(xs, ys){
+  const n = xs.length, mx = xs.reduce((p,q)=>p+q)/n, my = ys.reduce((p,q)=>p+q)/n;
+  let sxy=0, sxx=0, syy=0;
+  for (let k=0;k<n;k++){ sxy+=(xs[k]-mx)*(ys[k]-my); sxx+=(xs[k]-mx)**2; syy+=(ys[k]-my)**2; }
+  const b = sxy/sxx; return {a: my - b*mx, b, r: syy > 0 ? sxy/Math.sqrt(sxx*syy) : 0};
 }
-const FIXED_SOURCES = [
-  ["State population, density", "2020 resident counts", "data", 'US Census Bureau, "Population Density of the 50 States, the District of Columbia, and Puerto Rico: 1910 to 2020" (2020 Census apportionment release). Density is per square mile of land.'],
-  ["State mean commute", "one-way minutes", "data", "US Census Bureau, American Community Survey 2023 1-year, table S0801 (mean travel time to work, workers 16+ who did not work from home). Transcribed from JetPunk's round-trip table and halved; spot-check against data.census.gov."],
-  ["Country names and list", "249 entries", "data", "ISO 3166-1 via the pycountry package (common name where ISO gives one, e.g. Bolivia, Iran, Taiwan), sorted by the browser's English collation."],
-  ["Country population", "latest year (2025)", "data", "World Bank WDI SP.POP.TOTL, via github.com/datasets/population. Taiwan and many small territories are not covered."],
-  ["Territories list", "AS, GU, MP, PR, VI", "data", "The five inhabited US territories. Puerto Rico population from the same Census density table."],
-  ["Mode shares", "40 / 8 / 37 / 15 %", "est", "Anchored to StatCounter US platform share (Sept 2026: mobile 49.1%, desktop 48.5%, tablet 2.4%). The split into keyboard and autofill is our guess."],
-  ["Scroll tax formula", "see above", "model", "Position-only parts of a pick: hidden-row scrolling + Fitts' law pointing (mouse), type-ahead prefix length (keyboard), distance-proportional flicking (touch)."],
-  ["Commute–density line", "OLS on log10 density", "model", "Fitted live on this page from the two data columns."]
-];
-function buildTable(){
-  const tb = $("#srcTable tbody");
-  const rows = Object.values(P).map(p => [p.label, `${p.v} ${p.unit}`, p.kind, p.why]).concat(FIXED_SOURCES);
-  tb.innerHTML = rows.map(r => `<tr><td>${esc(r[0])}</td><td class="mono">${esc(r[1])}</td><td><span class="tag ${r[2]}">${r[2]==="data"?"DATA":r[2]==="est"?"EST":"MODEL"}</span></td><td class="note">${esc(r[3])}</td></tr>`).join("");
-}
-
-// ---------- CALIBRATION ----------
-let trials = [], tStart = 0, target = null, trialList = [];
-function resetTrials(){ trials = []; target = null; $("#trialTarget").textContent = "–"; $("#trialLog").textContent = ""; $("#trialSel").disabled = true; $("#chart3").innerHTML = ""; }
 function nextTrial(){
-  trialList = list.slice();
-  const sel = $("#trialSel");
-  sel.innerHTML = '<option value="">Select…</option>' + trialList.map((it,i)=>`<option value="${i}">${esc(it.label)}</option>`).join("");
-  sel.value = ""; sel.disabled = false;
-  // spread targets over the list: pick from the j-th eighth
-  const j = trials.length, n = trialList.length;
+  const sel = $("#trialSel"), n = countryList.length, j = trials.length;
+  fill(sel, countryList, "Select…"); sel.disabled = false;
   const lo = Math.floor(j*n/8), hi = Math.max(lo+1, Math.floor((j+1)*n/8));
   target = lo + Math.floor(Math.random()*(hi-lo));
-  $("#trialTarget").textContent = trialList[target].label;
+  $("#trialTarget").textContent = countryList[target].label;
+  $("#trialCount").textContent = `Trial ${j+1} of 8`;
   tStart = performance.now();
 }
-$("#trialStart").addEventListener("click", () => { resetTrials(); nextTrial(); });
+$("#trialStart").addEventListener("click", () => {
+  trials = []; $("#trialTable tbody").innerHTML = ""; $("#trialTable").hidden = false;
+  $("#trialStart").textContent = "Restart test"; nextTrial();
+});
 $("#trialSel").addEventListener("change", e => {
   if (target === null || e.target.value === "") return;
   const got = +e.target.value;
-  if (got !== target){ $("#trialLog").textContent = `That was ${trialList[got].label}. Keep going, the clock is still running.`; return; }
-  const dt = (performance.now() - tStart)/1000;
+  if (got !== target){ $("#trialCount").textContent = `Trial ${trials.length+1} of 8. That was ${countryList[got].label}; the timer is still running.`; return; }
+  const dt = (performance.now() - tStart) / 1000;
   trials.push([target+1, dt]);
-  $("#trialLog").textContent = trials.map(t => `#${t[0]}: ${t[1].toFixed(2)} s`).join(" · ");
-  drawChart3();
-  if (trials.length < 8) nextTrial();
-  else {
-    target = null; $("#trialSel").disabled = true; $("#trialTarget").textContent = "done";
-    const f = regress(trials.map(t=>t[0]), trials.map(t=>t[1]));
-    mySlope = Math.max(0, f.b);
-    $("#useMine").disabled = false;
-    $("#trialLog").innerHTML += `<br><span class="tag you">YOU</span> Your slope: <b>${(f.b*1000).toFixed(0)} ms per row</b> (intercept ${f.a.toFixed(2)} s, r = ${f.r.toFixed(2)}). Eight points is a small sample; treat it as a rough personal figure.`;
-    drawChart3(f);
-  }
+  $("#trialTable tbody").insertAdjacentHTML("beforeend", `<tr><td class="n">${trials.length}</td><td>${esc(countryList[target].label)}</td><td class="n">${target+1}</td><td class="n">${dt.toFixed(2)}</td></tr>`);
+  if (trials.length < 8) { nextTrial(); return; }
+  target = null; $("#trialSel").disabled = true; $("#trialTarget").textContent = "—"; $("#trialCount").textContent = "Test complete.";
+  const f = regress(trials.map(t=>t[0]), trials.map(t=>t[1]));
+  fit = {a: f.a, b: Math.max(0, f.b), r: f.r, rawB: f.b};
+  let kind;
+  if (fit.b < 0.004) kind = "This is consistent with selecting by typing (type-ahead): list position costs you almost nothing.";
+  else if (fit.b < 0.02) kind = "This is a fast scroller.";
+  else if (fit.b < 0.05) kind = "This is close to the default estimate.";
+  else kind = "This is slower than the default estimate; position costs you more than most.";
+  $("#speedStatus").innerHTML = `<b>Measured selection speed: ${(fit.b*1000).toFixed(1)} ms per row</b> (fixed time per selection ${fit.a.toFixed(2)} s; r = ${fit.r.toFixed(2)}; 8 trials). ${kind} Steps 2 to 4 now use this value.`;
+  renderAll();
 });
-function drawChart3(f){
-  const svg = $("#chart3"), W = 1000, H = 220, pl = 50, pb = 30, pt = 12, pr = 12, n = list.length;
-  const maxT = Math.max(2, ...trials.map(t=>t[1])) * 1.1;
-  const X = i => pl + (i-1)/(n-1)*(W-pl-pr), Y = t => H - pb - t/maxT*(H-pb-pt);
-  let g = `<line x1="${pl}" x2="${W-pr}" y1="${H-pb}" y2="${H-pb}" stroke="var(--line)"/>`;
-  g += `<text x="${pl}" y="${H-8}">#1</text><text x="${W-pr}" y="${H-8}" text-anchor="end">#${n}</text><text x="${(pl+W)/2}" y="${H-8}" text-anchor="middle">list position</text>`;
-  g += `<text x="${pl-6}" y="${Y(0)+4}" text-anchor="end">0 s</text><text x="${pl-6}" y="${Y(maxT/1.1)+4}" text-anchor="end">${(maxT/1.1).toFixed(1)} s</text>`;
-  trials.forEach(t => g += `<circle cx="${X(t[0])}" cy="${Y(t[1])}" r="5" fill="var(--accent)"/>`);
-  if (f) g += `<line x1="${X(1)}" y1="${Y(f.a+f.b)}" x2="${X(n)}" y2="${Y(f.a+f.b*n)}" stroke="var(--model)" stroke-width="2" stroke-dasharray="6 4"/>`;
-  svg.innerHTML = g;
+
+// ---------- per-step output ----------
+const opened = {};
+function track(sel){
+  sel.addEventListener("pointerdown", () => { if (opened[sel.id] == null) opened[sel.id] = performance.now(); });
+  sel.addEventListener("keydown", () => { if (opened[sel.id] == null) opened[sel.id] = performance.now(); });
+  sel.addEventListener("blur", () => { opened[sel.id] = null; });
 }
+const measured = {};
+function stamp(sel){ if (opened[sel.id] != null){ measured[sel.id] = (performance.now() - opened[sel.id]) / 1000; } opened[sel.id] = null; }
+function measureLine(selId, i){
+  const m = measured[selId]; if (m == null) return "";
+  const pred = fit ? ` Your fitted line predicts ${(fit.a + fit.b*i).toFixed(2)} s.` : "";
+  return `<p class="small">Your measured time for this selection: ${m.toFixed(2)} s.${pred}</p>`;
+}
+function meter(i, n){ return `<div class="meter" title="Position ${i} of ${n}"><span style="left:calc(${((i-1)/Math.max(1,n-1))*100}% - 1px)"></span></div><div class="small">Position ${fmtInt(i)} of ${fmtInt(n)}</div>`; }
+function basis(){ return fit ? `your measured ${(fit.b*1000).toFixed(1)} ms per row` : `the default ${(A().b0*1000).toFixed(0)} ms per row (Step 1 not completed)`; }
 
-// ---------- THEME ----------
-$("#themeBtn").addEventListener("click", () => {
-  const r = document.documentElement, dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  r.dataset.theme = dark ? "light" : "dark";
+function rows(entries, n, perYear, years){
+  // entries: [{label, i(or tau), pop, you}]
+  return entries.map(e => {
+    const tau = e.tau, L = tau*perYear*years, P = e.pop ? tau*perYear*e.pop : null;
+    return `<tr${e.you?' class="you"':''}><td>${esc(e.label)}${e.you?" (you)":""}</td><td class="n">${e.pos}</td><td class="n">${fmtDur(tau)}</td><td class="n">${fmtDur(L)}</td><td class="n">${P==null?"not available":fmtDur(P)}</td></tr>`;
+  }).join("");
+}
+const HEAD = `<thead><tr><th>Entry</th><th class="n">Position</th><th class="n">Per selection</th><th class="n">Lifetime</th><th class="n">All residents, per year</th></tr></thead>`;
+
+let curState = null, curCountry = null, curCountry2 = null, curCity = null;
+
+function renderState(){
+  const box = $("#outState"); if (!curState){ box.innerHTML = ""; return; }
+  const a = A(), b = slope(), n = stateList.length, i = stateList.indexOf(curState) + 1;
+  const ent = [{label:curState.label, pos:i, tau:b*(i-1), pop:curState.pop, you:true}];
+  ["AK","WY"].forEach(c => { const k = stateList.findIndex(s=>s.code===c); if (stateList[k] !== curState) ent.push({label:stateList[k].label, pos:k+1, tau:b*k, pop:stateList[k].pop}); });
+  ent.sort((x,y)=>x.pos-y.pos);
+  const ak = stateList.findIndex(s=>s.code==="AK"), wy = stateList.findIndex(s=>s.code==="WY");
+  box.innerHTML = meter(i,n) + `<div class="tablewrap"><table>${HEAD}<tbody>${rows(ent,n,a.nState,a.Y)}</tbody></table></div>` +
+    `<p class="small">Time beyond the first entry (Alabama), at ${basis()}, ${a.nState} selections per year, ${a.Y} years. A Wyoming resident pays ${fmtDur(b*(wy-ak)*a.nState*a.Y)} more over a lifetime than an Alaska resident.</p>` + measureLine("selState", i);
+}
+function renderCountry(){
+  const box = $("#outCountry"); if (!curCountry){ box.innerHTML = ""; return; }
+  const a = A(), b = slope(), n = countryList.length, i = countryList.indexOf(curCountry) + 1;
+  const ent = [{label:curCountry.label, pos:i, tau:b*(i-1), pop:curCountry.pop, you:true}];
+  [0, n-1].forEach(k => { if (countryList[k] !== curCountry) ent.push({label:countryList[k].label, pos:k+1, tau:b*k, pop:countryList[k].pop}); });
+  const us = countryList.findIndex(c=>c.code==="US");
+  if (countryList[us] !== curCountry) ent.push({label:countryList[us].label, pos:us+1, tau:b*us, pop:countryList[us].pop});
+  ent.sort((x,y)=>x.pos-y.pos);
+  box.innerHTML = meter(i,n) + `<div class="tablewrap"><table>${HEAD}<tbody>${rows(ent,n,a.nCountry,a.Y)}</tbody></table></div>` +
+    `<p class="small">Time beyond the first entry (${esc(countryList[0].label)}), at ${basis()}, ${a.nCountry} selections per year, ${a.Y} years.</p>` + measureLine("selCountry", i);
+}
+function renderCity(){
+  const box = $("#outCity"); if (!curCountry2 || !curCity){ box.innerHTML = ""; return; }
+  const a = A(), b = slope(), list = cityList(curCountry2.code), n = list.length;
+  const ic = countryList.indexOf(curCountry2) + 1, i = list.indexOf(curCity) + 1;
+  const tc = b*(ic-1), tcity = b*(i-1), tau = tc + tcity;
+  const last = list[n-1];
+  box.innerHTML = meter(i,n) + `<div class="tablewrap"><table><thead><tr><th>Component</th><th class="n">Position</th><th class="n">Per selection</th><th class="n">Lifetime</th></tr></thead><tbody>
+    <tr><td>Country: ${esc(curCountry2.label)}</td><td class="n">${ic} of ${countryList.length}</td><td class="n">${fmtDur(tc)}</td><td class="n">${fmtDur(tc*a.nCity*a.Y)}</td></tr>
+    <tr><td>City: ${esc(curCity.label)}</td><td class="n">${fmtInt(i)} of ${fmtInt(n)}</td><td class="n">${fmtDur(tcity)}</td><td class="n">${fmtDur(tcity*a.nCity*a.Y)}</td></tr>
+    <tr class="you"><td><b>Total</b></td><td class="n"></td><td class="n"><b>${fmtDur(tau)}</b></td><td class="n"><b>${fmtDur(tau*a.nCity*a.Y)}</b></td></tr>
+    </tbody></table></div>` +
+    `<p class="small">All ${fmtInt(curCity.pop)} residents of ${esc(curCity.label)} together, per year: ${fmtDur(tau*a.nCity*curCity.pop)}. The last city in this list, ${esc(last.label)}, costs ${fmtDur(b*(n-1))} per selection. At ${basis()}, ${a.nCity} selections per year, ${a.Y} years.${n > 249 ? " This list is longer than the test list; see Technical Note 7(c)." : ""}</p>` + measureLine("selCity", i);
+}
+function renderStatement(){
+  const box = $("#statementBox"), a = A(), b = slope();
+  const parts = [];
+  if (curState){ const i = stateList.indexOf(curState)+1; parts.push(["U.S. state dropdown", `${curState.label}, position ${i} of ${stateList.length}`, b*(i-1)*a.nState*a.Y]); }
+  if (curCountry){ const i = countryList.indexOf(curCountry)+1; parts.push(["Country dropdown", `${curCountry.label}, position ${i} of ${countryList.length}`, b*(i-1)*a.nCountry*a.Y]); }
+  if (curCountry2 && curCity){ const l = cityList(curCountry2.code), ic = countryList.indexOf(curCountry2)+1, i = l.indexOf(curCity)+1;
+    parts.push(["Country and city dropdowns", `${curCity.label}, ${curCountry2.label}; positions ${ic} and ${fmtInt(i)}`, b*((ic-1)+(i-1))*a.nCity*a.Y]); }
+  if (!parts.length){ box.innerHTML = `<p class="small">Complete Steps 1 to 4 to generate your statement.</p>`; return; }
+  const total = parts.reduce((s,p)=>s+p[2],0);
+  box.innerHTML = `<h3>Statement of Lifetime Dropdown Liability</h3>
+    <div class="tablewrap"><table><thead><tr><th>Line</th><th>Item</th><th>Basis</th><th class="n">Lifetime time</th></tr></thead><tbody>
+    ${parts.map((p,k)=>`<tr><td>${k+1}</td><td>${p[0]}</td><td>${esc(p[1])}</td><td class="n">${fmtDur(p[2])}</td></tr>`).join("")}
+    <tr class="you"><td>${parts.length+1}</td><td colspan="2"><b>Total lifetime liability</b> (add lines 1 to ${parts.length})</td><td class="n"><b>${fmtDur(total)}</b></td></tr>
+    </tbody></table></div>
+    <p class="small">Selection speed: ${basis()}. Assumptions: Technical Note 5. This statement is an estimate and is not payable.</p>`;
+}
+function renderAll(){ renderState(); renderCountry(); renderCity(); renderStatement(); }
+
+// ---------- wiring ----------
+fill($("#selState"), stateList, "Select…");
+fill($("#selCountry"), countryList, "Select…");
+fill($("#selCountry2"), countryList, "Select…");
+["#selState","#selCountry","#selCountry2","#selCity"].forEach(s => track($(s)));
+$("#selState").addEventListener("change", e => { stamp(e.target); curState = e.target.value === "" ? null : stateList[+e.target.value]; renderAll(); });
+$("#selCountry").addEventListener("change", e => { stamp(e.target); curCountry = e.target.value === "" ? null : countryList[+e.target.value]; renderAll(); });
+$("#selCountry2").addEventListener("change", e => {
+  stamp(e.target);
+  curCountry2 = e.target.value === "" ? null : countryList[+e.target.value]; curCity = null; delete measured.selCity;
+  const sel = $("#selCity");
+  if (!curCountry2){ sel.innerHTML = "<option>Select a country first</option>"; sel.disabled = true; }
+  else {
+    const l = cityList(curCountry2.code);
+    if (!l.length){ sel.innerHTML = "<option>No places of 15,000 or more listed</option>"; sel.disabled = true; }
+    else { fill(sel, l, "Select…"); sel.disabled = false; }
+    $("#cityHelp").textContent = `${fmtInt(l.length)} places with a population of 15,000 or more in ${curCountry2.label}, alphabetical. Your selection is timed.`;
+  }
+  renderAll();
 });
-
-buildKnobs(); buildTable(); populate();
+$("#selCity").addEventListener("change", e => { stamp(e.target); curCity = e.target.value === "" ? null : cityList(curCountry2.code)[+e.target.value]; renderAll(); });
+["#nState","#nCountry","#nCity","#nYears","#bDefault"].forEach(s => $(s).addEventListener("input", () => {
+  if (!fit) $("#speedStatus").innerHTML = `Not yet tested. Until you finish the test, Steps 2 to 4 use the default estimate of <b>${(A().b0*1000).toFixed(0)} ms per row</b>.`;
+  renderAll();
+}));
 </script>
 </body>
 </html>

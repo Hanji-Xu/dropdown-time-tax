@@ -2,20 +2,22 @@
 
 **▶ Play it:** https://hanji-xu.github.io/dropdown-time-tax/
 
-**Observation:** Alaska is second in every alphabetical list of US state names, so Alaskans barely scroll. Wyoming is last. What does your place in the alphabet cost you over a lifetime, and how does that compare with what your place on the map costs you?
+**Observation:** Alaska is second in every alphabetical list of US state names, so Alaskans barely scroll. Wyoming is last. What does your place in the alphabet cost you over a lifetime?
 
-**What it does:**
-1. **The scroll tax.** Pick where you live in a real dropdown (US states with or without DC and territories, postal codes, or the 249-entry ISO 3166-1 country list). The page shows the extra time per pick against the first entry, the lifetime cost, and the cost summed over everyone who lives there, as a bar chart over every entry.
-2. **The waiting tax.** Commute time by state from the Census Bureau's American Community Survey, as a proxy for the waiting that crowded places impose, plotted against population density with a log-density fit.
-3. **Calibrate with your own hand.** Find 8 named entries as fast as you can; a straight-line fit gives your personal cost per row, which can replace the model.
+**What it does:** the page is dressed as a plain, dense government form (a fictional "Office of Dropdown Time Accounting"), because that is where long dropdowns live.
+1. **Speed test.** Find 8 named countries in the real 249-entry country dropdown. A straight-line fit of time against list position gives your personal seconds per row. People who type to select get a slope near zero, and the page says so.
+2. **U.S. state.** Pick your state (50 + DC). Shows your position, extra time per selection vs the first entry, the lifetime cost and the cost summed over everyone who lives there, next to Alaska and Wyoming.
+3. **Country.** The same for the ISO 3166-1 list (249 entries), next to Afghanistan, the United States and Zimbabwe.
+4. **Country and city.** Country plus city from every place of 15,000+ people in that country (GeoNames), e.g. 3,407 US cities.
+5. **Statement of lifetime dropdown liability** totals the three.
 
-**Findings:** Alaska vs Wyoming in a 51-entry state list is about 20 minutes per lifetime (range roughly 4 minutes to 2 hours), not hours. A US resident in a 249-row country list loses about 2 hours. Commute differences between states are over 1000× larger; commute vs log10 density gives r = 0.80.
+Each real selection is also timed and compared with what your fitted line predicts.
 
-**Model (documented in the page):** per-pick tax is a mix of mouse (scroll past hidden rows plus a Fitts'-law point), keyboard type-ahead (fewest letters to reach the entry), touch (distance-proportional picker) and autofill (zero). Only the position-dependent part counts. Every input is labelled DATA, EST, MODEL or YOU, with its source or reasoning.
+**Findings:** with the default 35 ms per row, a Wyoming resident pays about 21 minutes more over a lifetime than an Alaskan in a state dropdown, not hours. A typer pays almost nothing. Long country and city lists are where the minutes add up.
 
-**Flagged:** commute is a proxy for waiting, not a stopwatch on queues. Visible rows default to 20 (Chromium's popup limit); macOS native menus show more. Some commute figures came via a third-party transcription of the ACS table and are marked as such in the page.
+**Model (dense technical notes at the bottom of the page):** per-selection tax = slope × (position − 1); lifetime = tax × selections per year × 62 form-filling years; population total = tax × selections per year × residents. Selections per year (12 state, 6 country, 2 country+city) are estimates and editable on the page. Data: 2020 Census state populations, ISO 3166-1 via pycountry, World Bank population (2025), GeoNames cities15000 (CC BY 4.0), CDC NCHS life expectancy.
 
-**Source:** `source/` holds `template.html`, the data files and `build.py`. `python3 build.py 06 ../index.html` rebuilds the page.
+**Source:** `source/` holds `template.html`, the data files (`dens.csv`, `countries.json`, `cities.json`) and `build.py`. `python3 build.py 06 ../index.html` rebuilds the page.
 
 ---
 
