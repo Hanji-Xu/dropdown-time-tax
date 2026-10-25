@@ -58,6 +58,9 @@ tr.you td{background:var(--hl)}
 .notes p{margin:0 0 6px}
 .notes table{font-size:11px}
 #trialTarget{font-weight:bold;background:var(--hl);padding:0 4px}
+.addr .field{display:grid;grid-template-columns:190px minmax(0,1fr);gap:2px 10px;align-items:start}
+.addr .field label{padding-top:2px}
+@media (max-width:720px){.addr .field{display:block}}
 footer{border-top:1px solid var(--line);font-size:11px;color:var(--muted);padding:8px 16px;max-width:1180px;margin:0 auto}
 @media (max-width:720px){
   .wrap{display:block}
@@ -77,9 +80,7 @@ footer{border-top:1px solid var(--line);font-size:11px;color:var(--muted);paddin
   <h4>On this page</h4>
   <ul>
     <li><a href="#step1">Step 1. Speed test</a></li>
-    <li><a href="#step2">Step 2. U.S. state</a></li>
-    <li><a href="#step3">Step 3. Country</a></li>
-    <li><a href="#step4">Step 4. Country and city</a></li>
+    <li><a href="#step2">Step 2. Address</a></li>
     <li><a href="#statement">Statement of liability</a></li>
     <li><a href="#notes">Technical notes</a></li>
     <li><a href="#sources">Data sources</a></li>
@@ -93,91 +94,77 @@ footer{border-top:1px solid var(--line);font-size:11px;color:var(--muted);paddin
 <main>
 <h1>Dropdown Time Tax: Lifetime Selection Time Estimate</h1>
 <div class="formno">Form DTT-__NUM__ · Art Insights series · Estimated completion time: 3 minutes · <span class="req">*</span> required</div>
-<p class="intro">Residents whose place of residence appears near the top of an alphabetical dropdown menu (for example, Alaska, the second U.S. state) spend less time selecting it than residents near the bottom (for example, Wyoming). This form measures how fast you select from a dropdown, then estimates the time your position in the alphabet costs you over a lifetime. Complete Step 1 first. Steps 2 to 4 use your measured speed.</p>
+<p class="intro">Residents whose place of residence appears near the top of an alphabetical dropdown menu (for example, Alaska, the second U.S. state) spend less time selecting it than residents near the bottom (for example, Wyoming). This form first measures how fast you select from a dropdown, then asks for your address one dropdown at a time, the way address forms do, and estimates what your position in each list costs you over a lifetime.</p>
 
 <h2 id="step1">Step 1. Selection speed test</h2>
 <fieldset>
   <legend>Timed selection <span class="req">*</span></legend>
-  <p>Select <b>Begin test</b>. A country name will appear. Find it in the dropdown as quickly as you can, using whatever method you normally use (mouse, trackpad, keyboard, or touch). There are 8 names, spread from the top of the list to the bottom.</p>
+  <p>Select <b>Begin test</b>. A word will appear. Find it in the dropdown as quickly as you can, using whatever method you normally use (mouse, trackpad, keyboard, or touch). The list holds 250 dishes and foreign words that you are unlikely to know, the same length as the country list in Step 2, so familiarity with the list cannot help you. There are 8 words, spread from the top of the list to the bottom.</p>
   <div class="field"><button type="button" id="trialStart">Begin test</button> &nbsp; Find: <span id="trialTarget">—</span> &nbsp; <span class="small" id="trialCount"></span></div>
-  <div class="field"><label for="trialSel">Country</label><br><select id="trialSel" disabled><option>Select…</option></select></div>
-  <div class="tablewrap"><table id="trialTable" hidden><thead><tr><th class="n">Trial</th><th>Entry</th><th class="n">Position</th><th class="n">Time (s)</th></tr></thead><tbody></tbody></table></div>
-  <div class="status" id="speedStatus">Not yet tested. Until you finish the test, Steps 2 to 4 use the default estimate of <b>35 ms per row</b>.</div>
+  <div class="field"><label for="trialSel">Item</label><br><select id="trialSel" disabled><option>Select…</option></select></div>
+  <div class="tablewrap"><table id="trialTable" hidden><thead><tr><th class="n">Trial</th><th>Item</th><th class="n">Position</th><th class="n">Time (s)</th></tr></thead><tbody></tbody></table></div>
+  <div class="status" id="speedStatus">Not yet tested. Until you finish the test, Step 2 uses the default estimate of <b>35 ms per row</b>.</div>
 </fieldset>
 
-<h2 id="step2">Step 2. U.S. state</h2>
-<fieldset>
-  <legend>State of residence</legend>
-  <div class="field"><label for="selState">State or district</label><br><select id="selState"></select>
-    <div class="help">50 states and the District of Columbia, alphabetical. Your selection is timed.</div></div>
-  <div id="outState"></div>
-</fieldset>
-
-<h2 id="step3">Step 3. Country</h2>
-<fieldset>
-  <legend>Country of residence</legend>
-  <div class="field"><label for="selCountry">Country</label><br><select id="selCountry"></select>
-    <div class="help">ISO 3166-1, 249 entries, alphabetical. Your selection is timed.</div></div>
-  <div id="outCountry"></div>
-</fieldset>
-
-<h2 id="step4">Step 4. Country and city</h2>
-<fieldset>
-  <legend>Country and city of residence</legend>
-  <div class="field"><label for="selCountry2">Country</label><br><select id="selCountry2"></select></div>
-  <div class="field"><label for="selCity">City</label><br><select id="selCity" disabled><option>Select a country first</option></select>
-    <div class="help" id="cityHelp">All places with a population of 15,000 or more, alphabetical. Your selection is timed.</div></div>
-  <div id="outCity"></div>
+<h2 id="step2">Step 2. Address</h2>
+<fieldset class="addr">
+  <legend>Place of residence</legend>
+  <p class="small">Select each field in order. Each list depends on the one above it, so only real combinations are offered. Each selection is timed.</p>
+  <div class="field"><label for="selL0">Country <span class="req">*</span></label><div><select id="selL0"></select><div class="help" id="helpL0"></div></div></div>
+  <div class="field"><label for="selL1" id="labL1">State / province / region</label><div><select id="selL1" disabled><option>Select a country first</option></select><div class="help" id="helpL1"></div></div></div>
+  <div class="field"><label for="selL2" id="labL2">City</label><div><select id="selL2" disabled><option>Select the field above first</option></select><div class="help" id="helpL2"></div></div></div>
+  <div class="field" id="rowL3" hidden><label for="selL3" id="labL3">District</label><div><select id="selL3" disabled></select><div class="help" id="helpL3"></div></div></div>
+  <div id="outAddr"></div>
 </fieldset>
 
 <h2 id="statement">Statement of lifetime dropdown liability</h2>
-<div class="statement" id="statementBox"><p class="small">Complete Steps 1 to 4 to generate your statement.</p></div>
+<div class="statement" id="statementBox"><p class="small">Complete Steps 1 and 2 to generate your statement.</p></div>
 
 <h2 id="notes">Technical notes</h2>
 <div class="notes">
 <h3>1. Purpose and scope</h3>
-<p>This form estimates the additional time a person spends selecting a place of residence from an alphabetically ordered dropdown menu (an HTML <i>select</i> element) because of that place's position in the list. Only the position-dependent part of each selection is counted. Time spent opening the menu, reading the field label, and confirming the choice is the same for the first and the last entry and is excluded. Estimates are illustrative. They are computed from your own measured selection speed and from published lists and population counts, combined with usage assumptions that are stated in Section 5 and are not drawn from any survey.</p>
+<p>This form estimates the additional time a person spends selecting a place of residence from alphabetically ordered dropdown menus (HTML <i>select</i> elements) because of that place's position in each list. Only the position-dependent part of each selection is counted. Time spent opening the menu, reading the field label, and confirming the choice is the same for the first and the last entry and is excluded. Estimates are illustrative. They combine your own measured selection speed with the lists used by many address forms and with usage assumptions stated in Section 5, which are not drawn from any survey.</p>
 <h3>2. Measurement of selection speed (Step 1)</h3>
-<p>The speed test presents 8 target names drawn from the 249-entry country list used in Step 3. Trial <i>j</i> (j = 1, …, 8) draws its target at random from the <i>j</i>-th eighth of the list, so the targets span positions near the top through near the bottom. The timer starts when the target name is displayed and stops when the matching entry is selected; selecting a wrong entry does not stop the timer. For each trial the page records the target position <i>i</i> (counting the first real entry as 1) and the elapsed time <i>t</i> in seconds, measured with the browser's high-resolution clock (performance.now). An ordinary least-squares line t = a + b·i is fitted to the 8 points. The slope <i>b</i>, in seconds per row, is your selection speed; the intercept <i>a</i> absorbs reading the target, opening the menu, and confirming. A negative slope is set to zero. The correlation coefficient <i>r</i> is reported as a check on fit quality. Users who select by typing the first letters of an entry (browser type-ahead) typically produce a slope near zero, which correctly implies that list position costs them almost nothing. If the test is not completed, a default slope of 35 ms per row is used. The default is an estimate derived from an earlier mixed-method model of this series (40% mouse with 20 visible rows and a 12 rows/s wheel scroll, 8% keyboard type-ahead, 37% touch picker at 0.03 s per row, 15% browser autofill), which gave about 1.8 s for the 51st entry of the state list relative to the 1st, i.e. about 36 ms per row.</p>
+<p>The test list contains 250 entries, equal to the length of the country list in Step 2, made up of __NFOODS__ dish names and __NWORDS__ words from languages other than English, all real and all written in the Latin alphabet, sorted with the same collation as the address lists. Unfamiliar entries were chosen so that the test measures scanning and scrolling rather than memory of where a familiar name sits; a familiar list may be faster (Section 7). Trial <i>j</i> (j = 1, …, 8) draws its target at random from the <i>j</i>-th eighth of the list, so targets span the top through the bottom. The timer starts when the target is displayed and stops when the matching entry is selected; a wrong selection does not stop it. For each trial the page records the target position <i>i</i> (the first real entry is 1) and the elapsed time <i>t</i> in seconds from the browser's high-resolution clock (performance.now). An ordinary least-squares line t = a + b·i is fitted to the 8 points. The slope <i>b</i>, in seconds per row, is your selection speed; the intercept <i>a</i> absorbs reading the target, opening the menu, and confirming. A negative slope is set to zero. The correlation coefficient <i>r</i> is reported as a check on fit quality. Users who select by typing the first letters of an entry (browser type-ahead) typically produce a slope near zero, which correctly implies that list position costs them almost nothing. If the test is not completed, a default slope of 35 ms per row is used, an estimate from an earlier mixed-method model in this series (40% mouse with 20 visible rows and a 12 rows/s wheel scroll, 8% keyboard type-ahead, 37% touch picker at 0.03 s per row, 15% browser autofill), which gave about 1.8 s for the 51st entry of a state list relative to the 1st, or about 36 ms per row.</p>
 <h3>3. Computation of the per-selection tax</h3>
-<p>For an entry at position <i>i</i> in a list, the per-selection tax is τ = b·(i − 1) seconds, the predicted extra time relative to the first entry in the same list. For Step 4, the tax is the sum of the country term and the city term, τ = b·(i<sub>country</sub> − 1) + b·(i<sub>city</sub> − 1), because the user must select both. The same measured slope is applied to every list. Lists longer than the test list (for example, the 3,407 U.S. cities in Step 4) are an extrapolation beyond the measured range; see Section 6. Each step also reports the time you actually took for that selection, measured from first pointer or key contact with the menu to the change of value, and the time predicted by your fitted line (a + b·i) for comparison.</p>
-<h3>4. Computation of lifetime and population totals</h3>
-<p>Lifetime liability is L = τ · n · Y, where <i>n</i> is the number of selections of that kind per year and <i>Y</i> is the number of form-filling years (Section 5). Annual population liability is P = τ · n · N, where <i>N</i> is the resident population of the selected place. P is summed person-time and is reported in years when large. The comparison figures in each step (Alaska and Wyoming; Afghanistan and Zimbabwe, which are the first and last entries in the country list as sorted here) use the same formula and the same slope.</p>
+<p>For an entry at position <i>i</i> in a list, the per-selection tax is τ = b·(i − 1) seconds, the predicted extra time relative to the first entry of the same list. Each address field is a separate list and is taxed separately: country (Step 2, first field), first-level division (state, province, prefecture, region, or the term the dataset uses for that country), city, and, where shown, district. The same measured slope applies to every list. Lists longer than the 250-entry test list (for example, 1,064 cities in California and 1,759 in Bavaria) are an extrapolation beyond the measured range (Section 7). Each field also reports the time you actually took for that selection, measured from first pointer or key contact with the menu to the change of value, and the time your fitted line predicts (a + b·i).</p>
+<h3>4. Computation of lifetime totals</h3>
+<p>Lifetime liability for a field is L = τ · n · Y, where <i>n</i> is the number of times per year that field is filled from a dropdown and <i>Y</i> is the number of form-filling years (Section 5). The statement sums L over the fields you completed. The comparison figures under each field (the first and last entries of that list, and Alaska and Wyoming in the U.S. list) use the same formula and slope.</p>
 <h3 id="notes-assume">5. Assumptions</h3>
 <p>The values below may be changed. Results update immediately. Values marked "estimate" have no survey source and are the author's assumptions.</p>
 <div class="tablewrap"><table>
 <thead><tr><th>Symbol</th><th>Quantity</th><th class="n">Value</th><th>Basis</th></tr></thead>
 <tbody>
-<tr><td>n<sub>s</sub></td><td>State dropdown selections per year</td><td class="n"><input type="number" id="nState" min="0" max="500" step="1" value="12"></td><td>Estimate. About one per month (checkout, shipping, sign-up, tax and benefit forms).</td></tr>
-<tr><td>n<sub>c</sub></td><td>Country dropdown selections per year</td><td class="n"><input type="number" id="nCountry" min="0" max="500" step="1" value="6"></td><td>Estimate. International sites, travel bookings, app sign-ups.</td></tr>
-<tr><td>n<sub>cc</sub></td><td>Country-and-city selections per year</td><td class="n"><input type="number" id="nCity" min="0" max="500" step="1" value="2"></td><td>Estimate. Less common; many sites use a free-text city field instead.</td></tr>
+<tr><td>n<sub>0</sub></td><td>Country dropdown selections per year</td><td class="n"><input type="number" id="n0" min="0" max="500" step="1" value="6"></td><td>Estimate. International sites, travel bookings, app sign-ups.</td></tr>
+<tr><td>n<sub>1</sub></td><td>State / province selections per year</td><td class="n"><input type="number" id="n1" min="0" max="500" step="1" value="12"></td><td>Estimate. About one per month: checkout, shipping, tax and benefit forms, which often ask for the state without the country.</td></tr>
+<tr><td>n<sub>2</sub></td><td>City selections per year</td><td class="n"><input type="number" id="n2" min="0" max="500" step="1" value="2"></td><td>Estimate. Most forms use a free-text city field; dropdowns are less common.</td></tr>
+<tr><td>n<sub>3</sub></td><td>District selections per year</td><td class="n"><input type="number" id="n3" min="0" max="500" step="1" value="2"></td><td>Estimate. Applies only where a district field is shown.</td></tr>
 <tr><td>Y</td><td>Form-filling years</td><td class="n"><input type="number" id="nYears" min="1" max="100" step="1" value="62"></td><td>U.S. life expectancy at birth, 78.4 years in 2023 (CDC NCHS Data Brief 521), less about 16 years before a person fills in forms independently. Estimate.</td></tr>
 <tr><td>b<sub>0</sub></td><td>Default slope if Step 1 is skipped</td><td class="n"><input type="number" id="bDefault" min="0" max="500" step="1" value="35"> ms</td><td>Estimate; see Section 2.</td></tr>
 </tbody></table></div>
-<h3>6. Lists and ordering</h3>
-<p>Step 2 lists the 50 states and the District of Columbia by full name. Territories are excluded; adding American Samoa would move every entry after "Alaska" down one place but would not change Alaska's position. Step 1 and Step 3 list the 249 entries of ISO 3166-1, using the ISO short name, or the ISO common name where one is defined (for example "Bolivia", "Iran", "Taiwan"). Step 4 lists, for the selected country, every populated place in the GeoNames <i>cities15000</i> extract (population 15,000 or more). Where two places in the same list share a name, the U.S. state code or the place's population is appended to distinguish them. All lists are sorted with the browser's English collation (Intl.Collator, base sensitivity), so "Åland Islands" sorts with A; another sort order would shift positions slightly. Live sites vary: some place the United States or another country first, some use search boxes or autocomplete, and some sort by postal code (in which case Alaska, AK, is first and Wyoming, WY, is still last). Those designs change the result and are not modelled.</p>
+<h3>6. Lists, hierarchy and ordering</h3>
+<p>The address lists reproduce the Countries States Cities Database (Section 8), an open dataset that is widely used to populate country, state and city dropdowns on websites and in form libraries. It lists 250 countries and territories. The second field lists that country's first-level divisions as the dataset records them, labelled with the division type the dataset gives for most of them (for example State, Province, Prefecture, State (Land)); where types are mixed the label reads "State / province / region". For the United States this list has 60 entries, because, like many U.S. address forms, it includes the District of Columbia, five territories, the U.S. Minor Outlying Islands and three Armed Forces postal regions; Alaska remains second and Wyoming last. The third field lists the populated places the dataset assigns to the selected division, excluding records the dataset documents as administrative units rather than settlements (types county, regency, prefecture, parish, banner, province, oblast, area, abandoned and historical) and merging exact duplicate names. In Japan the municipalities of Tokyo include its special wards (for example Shibuya-ku), as Japanese address forms do. A fourth field, district, is shown only where address forms in that country conventionally ask for it and the dataset supports it: in China, where the order is province, prefecture-level city, then district or county (for example Xinjiang, Ürümqi, Tianshan District). For the four Chinese municipalities (Beijing, Chongqing, Shanghai, Tianjin) the third field lists districts directly. Countries without recorded divisions, or divisions without recorded places, end the address at the last available field. All lists are sorted with the browser's English collation (Intl.Collator, base sensitivity), so accented letters sort with their base letter; other sort orders would shift positions slightly. Live sites vary: some place a default country first, some use search boxes, autocomplete, free-text fields, or postal-code ordering (in which Alaska, AK, is first and Wyoming, WY, is still last). Those designs change the result and are not modelled.</p>
 <h3 id="notes-limits">7. Limitations</h3>
-<p>(a) The linear model assumes each additional row costs the same time. Mouse users scroll only past rows hidden below the open menu (about 20 in Chromium-based browsers on Windows and Linux), so the true cost is lower near the top of a list and higher further down; the fitted slope averages over this. (b) Eight trials give an imprecise slope; a single slow trial can move it noticeably. Repeat the test to check. (c) For lists much longer than 249 entries, people usually switch strategy (type-ahead, browser find, or giving up and typing in a free-text field), so the Step 4 city figures overstate the cost for very long lists. They are the time you would spend if you kept scrolling at your measured rate. (d) Selection counts per year are assumptions, and the lifetime figure is proportional to them. (e) Population figures differ in date and definition between sources (Section 8). (f) Times are reported as continuous clock time: "2 hours" means 2 hours of selecting summed over a lifetime.</p>
+<p>(a) The linear model assumes each additional row costs the same time. Mouse users scroll only past rows hidden below the open menu (about 20 in Chromium-based browsers on Windows and Linux), so the true cost is lower near the top of a list and higher further down; the fitted slope averages over this. (b) Eight trials give an imprecise slope; one slow trial can move it noticeably. Repeat the test to check. (c) The test uses unfamiliar words. People who know roughly where their own country sits may jump there faster than they scan an unfamiliar list, so the measured slope may overstate their cost; the actual time recorded for each address field allows a comparison. (d) For lists much longer than 250 entries people usually switch strategy (type-ahead, browser find, or a free-text field), so city figures for very long lists overstate the cost. They are the time you would spend if you kept scrolling at your measured rate. (e) Selection counts per year are assumptions, and lifetime figures are proportional to them. (f) The dataset is community-maintained; some divisions are incomplete, some names are transliterated inconsistently, and city coverage varies between countries. (g) Times are continuous clock time: "2 hours" means 2 hours of selecting summed over a lifetime.</p>
 <h3 id="sources">8. Data sources</h3>
-<p>U.S. state and District of Columbia resident population: U.S. Census Bureau, 2020 Census, "Population Density of the 50 States, the District of Columbia, and Puerto Rico: 1910 to 2020" (apportionment release, April 2021). Country list: ISO 3166-1 as distributed in the <i>pycountry</i> package. Country population: World Bank, World Development Indicators, indicator SP.POP.TOTL, latest year available (2025), via the <i>datasets/population</i> repository; no figure is published for Taiwan and many small territories, which are shown as "not available". City list and city population: GeoNames (geonames.org), <i>cities15000</i> extract as distributed in the <i>geonamescache</i> package version __GNC_VER__, licensed CC BY 4.0; GeoNames populations come from mixed census years and should be read as approximate. U.S. life expectancy: National Center for Health Statistics, "Mortality in the United States, 2023", Data Brief No. 521 (December 2024). Chromium visible-row limit: kMaxVisibleRows = 20, Chromium popup menu source. The page has no network access; all data are embedded.</p>
+<p>Address lists: Countries States Cities Database (github.com/dr5hn/countries-states-cities-database), files countries.csv and states.csv from the repository and cities and counties from release assets, retrieved __DATE__, licensed under the Open Database License (ODbL) 1.0; the database draws in part on GeoNames (CC BY 4.0) and OpenStreetMap contributors. Chinese prefecture-level cities and districts are the dataset's level-2 and level-3 county records. Speed-test list: compiled for this piece from published dish names and dictionary words; no source dataset. U.S. life expectancy: National Center for Health Statistics, "Mortality in the United States, 2023", Data Brief No. 521 (December 2024). Chromium visible-row limit: kMaxVisibleRows = 20, Chromium popup menu source. The page makes no network requests; all data are embedded.</p>
 </div>
 </main>
 </div>
-<footer>Form DTT-__NUM__ · Part of Art Insights by Hanji Xu · Page last reviewed: __DATE__ · <a href="#top">Back to top</a></footer>
+<footer>Form DTT-__NUM__ · Part of Art Insights by Hanji Xu · Address data © Countries States Cities Database contributors, ODbL 1.0 · Page last reviewed: __DATE__ · <a href="#top">Back to top</a></footer>
 
 <script>
 "use strict";
-// [name, postal, 2020 resident population]
-const STATES = __STATES__;
-// [ISO short or common name, alpha-2, World Bank population or null]
-const COUNTRIES = __COUNTRIES__;
-// alpha-2 -> [[name, population, US state code or ""], ...]  (GeoNames cities15000)
-const CITIES = __CITIES__;
+// Speed-test list (dishes and foreign words)
+const TEST_WORDS = __TESTWORDS__;
+// [country, iso2, division label, [[division, [city, ...]] ...]]; China: [[province, [[city, [district, ...]] ...]] ...]
+const PLACES = __PLACES__;
 
 const $ = s => document.querySelector(s);
 const coll = new Intl.Collator("en", {sensitivity:"base"});
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmtInt = n => Math.round(n).toLocaleString("en-US");
+const byLabel = (a,b) => coll.compare(a.label, b.label);
 function fmtDur(sec){
   const a = Math.abs(sec);
   if (a === 0) return "0 s";
@@ -187,36 +174,35 @@ function fmtDur(sec){
   if (a < 5400) return (sec/60).toFixed(a < 600 ? 1 : 0) + " min";
   if (a < 86400*3) return (sec/3600).toFixed(a < 36000 ? 1 : 0) + " h";
   if (a < 86400*365*2) return fmtInt(sec/86400) + " days";
-  return (sec/86400/365.25).toLocaleString("en-US", {maximumFractionDigits: sec > 86400*365*100 ? 0 : 1}) + " years";
-}
-
-// ---------- lists ----------
-const stateList = STATES.map(s => ({label:s[0], code:s[1], pop:s[2]})).sort((a,b) => coll.compare(a.label,b.label));
-const countryList = COUNTRIES.map(c => ({label:c[0], code:c[1], pop:c[2]})).sort((a,b) => coll.compare(a.label,b.label));
-const cityCache = {};
-function cityList(code){
-  if (cityCache[code]) return cityCache[code];
-  const raw = (CITIES[code] || []).map(c => ({label:c[0], pop:c[1], st:c[2]}));
-  const count = {};
-  raw.forEach(c => count[c.label.toLowerCase()] = (count[c.label.toLowerCase()] || 0) + 1);
-  raw.forEach(c => { if (count[c.label.toLowerCase()] > 1) c.label += c.st ? ` (${c.st})` : ` (pop. ${fmtInt(c.pop)})`; });
-  // still-duplicate labels (same name, same state): add population
-  const c2 = {}; raw.forEach(c => c2[c.label] = (c2[c.label] || 0) + 1);
-  raw.forEach(c => { if (c2[c.label] > 1) c.label += ` (pop. ${fmtInt(c.pop)})`; });
-  raw.sort((a,b) => coll.compare(a.label,b.label));
-  return cityCache[code] = raw;
+  return (sec/86400/365.25).toLocaleString("en-US", {maximumFractionDigits:1}) + " years";
 }
 function fill(sel, list, placeholder){
   sel.innerHTML = `<option value="">${placeholder}</option>` + list.map((it,i) => `<option value="${i}">${esc(it.label)}</option>`).join("");
+  sel.disabled = false;
+}
+function blank(sel, text){ sel.innerHTML = `<option value="">${text}</option>`; sel.disabled = true; }
+
+// ---------- lists ----------
+const testList = TEST_WORDS.map(w => ({label:w})).sort(byLabel);
+const countryList = PLACES.map(c => ({label:c[0], code:c[1], divLabel:c[2], raw:c[3], level:0})).sort(byLabel);
+function kids(node){
+  if (node._kids) return node._kids;
+  let k;
+  if (node.level === 0) k = node.raw.map(r => ({label:r[0], raw:r[1], level:1, cn: node.code === "CN"}));
+  else if (node.level === 1 && node.cn){
+    // China: prefecture-level cities with their districts; municipalities list districts directly
+    k = node.raw.map(r => ({label:r[0], raw:r[1], level:2, leaf: !r[1].length}));
+    node._municipality = k.every(c => c.leaf);
+  }
+  else k = node.raw.map(s => ({label:s, level:node.level+1, leaf:true}));
+  return node._kids = k.sort(byLabel);
 }
 
 // ---------- assumptions ----------
-const A = () => ({
-  nState: +$("#nState").value || 0, nCountry: +$("#nCountry").value || 0, nCity: +$("#nCity").value || 0,
-  Y: +$("#nYears").value || 0, b0: (+$("#bDefault").value || 0) / 1000
-});
-let fit = null; // {a, b, r}
+const A = () => ({ n:[+$("#n0").value||0, +$("#n1").value||0, +$("#n2").value||0, +$("#n3").value||0], Y:+$("#nYears").value||0, b0:(+$("#bDefault").value||0)/1000 });
+let fit = null;
 const slope = () => fit ? fit.b : A().b0;
+const basis = () => fit ? `your measured ${(fit.b*1000).toFixed(1)} ms per row` : `the default ${(A().b0*1000).toFixed(0)} ms per row (Step 1 not completed)`;
 
 // ---------- speed test ----------
 let trials = [], target = null, tStart = 0;
@@ -227,11 +213,11 @@ function regress(xs, ys){
   const b = sxy/sxx; return {a: my - b*mx, b, r: syy > 0 ? sxy/Math.sqrt(sxx*syy) : 0};
 }
 function nextTrial(){
-  const sel = $("#trialSel"), n = countryList.length, j = trials.length;
-  fill(sel, countryList, "Select…"); sel.disabled = false;
+  const sel = $("#trialSel"), n = testList.length, j = trials.length;
+  fill(sel, testList, "Select…");
   const lo = Math.floor(j*n/8), hi = Math.max(lo+1, Math.floor((j+1)*n/8));
   target = lo + Math.floor(Math.random()*(hi-lo));
-  $("#trialTarget").textContent = countryList[target].label;
+  $("#trialTarget").textContent = testList[target].label;
   $("#trialCount").textContent = `Trial ${j+1} of 8`;
   tStart = performance.now();
 }
@@ -242,127 +228,112 @@ $("#trialStart").addEventListener("click", () => {
 $("#trialSel").addEventListener("change", e => {
   if (target === null || e.target.value === "") return;
   const got = +e.target.value;
-  if (got !== target){ $("#trialCount").textContent = `Trial ${trials.length+1} of 8. That was ${countryList[got].label}; the timer is still running.`; return; }
+  if (got !== target){ $("#trialCount").textContent = `Trial ${trials.length+1} of 8. That was ${testList[got].label}; the timer is still running.`; return; }
   const dt = (performance.now() - tStart) / 1000;
   trials.push([target+1, dt]);
-  $("#trialTable tbody").insertAdjacentHTML("beforeend", `<tr><td class="n">${trials.length}</td><td>${esc(countryList[target].label)}</td><td class="n">${target+1}</td><td class="n">${dt.toFixed(2)}</td></tr>`);
+  $("#trialTable tbody").insertAdjacentHTML("beforeend", `<tr><td class="n">${trials.length}</td><td>${esc(testList[target].label)}</td><td class="n">${target+1}</td><td class="n">${dt.toFixed(2)}</td></tr>`);
   if (trials.length < 8) { nextTrial(); return; }
   target = null; $("#trialSel").disabled = true; $("#trialTarget").textContent = "—"; $("#trialCount").textContent = "Test complete.";
   const f = regress(trials.map(t=>t[0]), trials.map(t=>t[1]));
-  fit = {a: f.a, b: Math.max(0, f.b), r: f.r, rawB: f.b};
+  fit = {a:f.a, b:Math.max(0, f.b), r:f.r};
   let kind;
   if (fit.b < 0.004) kind = "This is consistent with selecting by typing (type-ahead): list position costs you almost nothing.";
   else if (fit.b < 0.02) kind = "This is a fast scroller.";
   else if (fit.b < 0.05) kind = "This is close to the default estimate.";
-  else kind = "This is slower than the default estimate; position costs you more than most.";
-  $("#speedStatus").innerHTML = `<b>Measured selection speed: ${(fit.b*1000).toFixed(1)} ms per row</b> (fixed time per selection ${fit.a.toFixed(2)} s; r = ${fit.r.toFixed(2)}; 8 trials). ${kind} Steps 2 to 4 now use this value.`;
-  renderAll();
+  else kind = "This is slower than the default estimate; list position costs you more than most.";
+  $("#speedStatus").innerHTML = `<b>Measured selection speed: ${(fit.b*1000).toFixed(1)} ms per row</b> (fixed time per selection ${fit.a.toFixed(2)} s; r = ${fit.r.toFixed(2)}; 8 trials). ${kind} Step 2 now uses this value.`;
+  render();
 });
 
-// ---------- per-step output ----------
-const opened = {};
-function track(sel){
-  sel.addEventListener("pointerdown", () => { if (opened[sel.id] == null) opened[sel.id] = performance.now(); });
-  sel.addEventListener("keydown", () => { if (opened[sel.id] == null) opened[sel.id] = performance.now(); });
-  sel.addEventListener("blur", () => { opened[sel.id] = null; });
-}
-const measured = {};
-function stamp(sel){ if (opened[sel.id] != null){ measured[sel.id] = (performance.now() - opened[sel.id]) / 1000; } opened[sel.id] = null; }
-function measureLine(selId, i){
-  const m = measured[selId]; if (m == null) return "";
-  const pred = fit ? ` Your fitted line predicts ${(fit.a + fit.b*i).toFixed(2)} s.` : "";
-  return `<p class="small">Your measured time for this selection: ${m.toFixed(2)} s.${pred}</p>`;
-}
-function meter(i, n){ return `<div class="meter" title="Position ${i} of ${n}"><span style="left:calc(${((i-1)/Math.max(1,n-1))*100}% - 1px)"></span></div><div class="small">Position ${fmtInt(i)} of ${fmtInt(n)}</div>`; }
-function basis(){ return fit ? `your measured ${(fit.b*1000).toFixed(1)} ms per row` : `the default ${(A().b0*1000).toFixed(0)} ms per row (Step 1 not completed)`; }
-
-function rows(entries, n, perYear, years){
-  // entries: [{label, i(or tau), pop, you}]
-  return entries.map(e => {
-    const tau = e.tau, L = tau*perYear*years, P = e.pop ? tau*perYear*e.pop : null;
-    return `<tr${e.you?' class="you"':''}><td>${esc(e.label)}${e.you?" (you)":""}</td><td class="n">${e.pos}</td><td class="n">${fmtDur(tau)}</td><td class="n">${fmtDur(L)}</td><td class="n">${P==null?"not available":fmtDur(P)}</td></tr>`;
-  }).join("");
-}
-const HEAD = `<thead><tr><th>Entry</th><th class="n">Position</th><th class="n">Per selection</th><th class="n">Lifetime</th><th class="n">All residents, per year</th></tr></thead>`;
-
-let curState = null, curCountry = null, curCountry2 = null, curCity = null;
-
-function renderState(){
-  const box = $("#outState"); if (!curState){ box.innerHTML = ""; return; }
-  const a = A(), b = slope(), n = stateList.length, i = stateList.indexOf(curState) + 1;
-  const ent = [{label:curState.label, pos:i, tau:b*(i-1), pop:curState.pop, you:true}];
-  ["AK","WY"].forEach(c => { const k = stateList.findIndex(s=>s.code===c); if (stateList[k] !== curState) ent.push({label:stateList[k].label, pos:k+1, tau:b*k, pop:stateList[k].pop}); });
-  ent.sort((x,y)=>x.pos-y.pos);
-  const ak = stateList.findIndex(s=>s.code==="AK"), wy = stateList.findIndex(s=>s.code==="WY");
-  box.innerHTML = meter(i,n) + `<div class="tablewrap"><table>${HEAD}<tbody>${rows(ent,n,a.nState,a.Y)}</tbody></table></div>` +
-    `<p class="small">Time beyond the first entry (Alabama), at ${basis()}, ${a.nState} selections per year, ${a.Y} years. A Wyoming resident pays ${fmtDur(b*(wy-ak)*a.nState*a.Y)} more over a lifetime than an Alaska resident.</p>` + measureLine("selState", i);
-}
-function renderCountry(){
-  const box = $("#outCountry"); if (!curCountry){ box.innerHTML = ""; return; }
-  const a = A(), b = slope(), n = countryList.length, i = countryList.indexOf(curCountry) + 1;
-  const ent = [{label:curCountry.label, pos:i, tau:b*(i-1), pop:curCountry.pop, you:true}];
-  [0, n-1].forEach(k => { if (countryList[k] !== curCountry) ent.push({label:countryList[k].label, pos:k+1, tau:b*k, pop:countryList[k].pop}); });
-  const us = countryList.findIndex(c=>c.code==="US");
-  if (countryList[us] !== curCountry) ent.push({label:countryList[us].label, pos:us+1, tau:b*us, pop:countryList[us].pop});
-  ent.sort((x,y)=>x.pos-y.pos);
-  box.innerHTML = meter(i,n) + `<div class="tablewrap"><table>${HEAD}<tbody>${rows(ent,n,a.nCountry,a.Y)}</tbody></table></div>` +
-    `<p class="small">Time beyond the first entry (${esc(countryList[0].label)}), at ${basis()}, ${a.nCountry} selections per year, ${a.Y} years.</p>` + measureLine("selCountry", i);
-}
-function renderCity(){
-  const box = $("#outCity"); if (!curCountry2 || !curCity){ box.innerHTML = ""; return; }
-  const a = A(), b = slope(), list = cityList(curCountry2.code), n = list.length;
-  const ic = countryList.indexOf(curCountry2) + 1, i = list.indexOf(curCity) + 1;
-  const tc = b*(ic-1), tcity = b*(i-1), tau = tc + tcity;
-  const last = list[n-1];
-  box.innerHTML = meter(i,n) + `<div class="tablewrap"><table><thead><tr><th>Component</th><th class="n">Position</th><th class="n">Per selection</th><th class="n">Lifetime</th></tr></thead><tbody>
-    <tr><td>Country: ${esc(curCountry2.label)}</td><td class="n">${ic} of ${countryList.length}</td><td class="n">${fmtDur(tc)}</td><td class="n">${fmtDur(tc*a.nCity*a.Y)}</td></tr>
-    <tr><td>City: ${esc(curCity.label)}</td><td class="n">${fmtInt(i)} of ${fmtInt(n)}</td><td class="n">${fmtDur(tcity)}</td><td class="n">${fmtDur(tcity*a.nCity*a.Y)}</td></tr>
-    <tr class="you"><td><b>Total</b></td><td class="n"></td><td class="n"><b>${fmtDur(tau)}</b></td><td class="n"><b>${fmtDur(tau*a.nCity*a.Y)}</b></td></tr>
-    </tbody></table></div>` +
-    `<p class="small">All ${fmtInt(curCity.pop)} residents of ${esc(curCity.label)} together, per year: ${fmtDur(tau*a.nCity*curCity.pop)}. The last city in this list, ${esc(last.label)}, costs ${fmtDur(b*(n-1))} per selection. At ${basis()}, ${a.nCity} selections per year, ${a.Y} years.${n > 249 ? " This list is longer than the test list; see Technical Note 7(c)." : ""}</p>` + measureLine("selCity", i);
-}
-function renderStatement(){
-  const box = $("#statementBox"), a = A(), b = slope();
-  const parts = [];
-  if (curState){ const i = stateList.indexOf(curState)+1; parts.push(["U.S. state dropdown", `${curState.label}, position ${i} of ${stateList.length}`, b*(i-1)*a.nState*a.Y]); }
-  if (curCountry){ const i = countryList.indexOf(curCountry)+1; parts.push(["Country dropdown", `${curCountry.label}, position ${i} of ${countryList.length}`, b*(i-1)*a.nCountry*a.Y]); }
-  if (curCountry2 && curCity){ const l = cityList(curCountry2.code), ic = countryList.indexOf(curCountry2)+1, i = l.indexOf(curCity)+1;
-    parts.push(["Country and city dropdowns", `${curCity.label}, ${curCountry2.label}; positions ${ic} and ${fmtInt(i)}`, b*((ic-1)+(i-1))*a.nCity*a.Y]); }
-  if (!parts.length){ box.innerHTML = `<p class="small">Complete Steps 1 to 4 to generate your statement.</p>`; return; }
-  const total = parts.reduce((s,p)=>s+p[2],0);
-  box.innerHTML = `<h3>Statement of Lifetime Dropdown Liability</h3>
-    <div class="tablewrap"><table><thead><tr><th>Line</th><th>Item</th><th>Basis</th><th class="n">Lifetime time</th></tr></thead><tbody>
-    ${parts.map((p,k)=>`<tr><td>${k+1}</td><td>${p[0]}</td><td>${esc(p[1])}</td><td class="n">${fmtDur(p[2])}</td></tr>`).join("")}
-    <tr class="you"><td>${parts.length+1}</td><td colspan="2"><b>Total lifetime liability</b> (add lines 1 to ${parts.length})</td><td class="n"><b>${fmtDur(total)}</b></td></tr>
-    </tbody></table></div>
-    <p class="small">Selection speed: ${basis()}. Assumptions: Technical Note 5. This statement is an estimate and is not payable.</p>`;
-}
-function renderAll(){ renderState(); renderCountry(); renderCity(); renderStatement(); }
-
-// ---------- wiring ----------
-fill($("#selState"), stateList, "Select…");
-fill($("#selCountry"), countryList, "Select…");
-fill($("#selCountry2"), countryList, "Select…");
-["#selState","#selCountry","#selCountry2","#selCity"].forEach(s => track($(s)));
-$("#selState").addEventListener("change", e => { stamp(e.target); curState = e.target.value === "" ? null : stateList[+e.target.value]; renderAll(); });
-$("#selCountry").addEventListener("change", e => { stamp(e.target); curCountry = e.target.value === "" ? null : countryList[+e.target.value]; renderAll(); });
-$("#selCountry2").addEventListener("change", e => {
-  stamp(e.target);
-  curCountry2 = e.target.value === "" ? null : countryList[+e.target.value]; curCity = null; delete measured.selCity;
-  const sel = $("#selCity");
-  if (!curCountry2){ sel.innerHTML = "<option>Select a country first</option>"; sel.disabled = true; }
-  else {
-    const l = cityList(curCountry2.code);
-    if (!l.length){ sel.innerHTML = "<option>No places of 15,000 or more listed</option>"; sel.disabled = true; }
-    else { fill(sel, l, "Select…"); sel.disabled = false; }
-    $("#cityHelp").textContent = `${fmtInt(l.length)} places with a population of 15,000 or more in ${curCountry2.label}, alphabetical. Your selection is timed.`;
+// ---------- address cascade ----------
+const SEL = [0,1,2,3].map(k => $("#selL"+k));
+const chosen = [null,null,null,null];   // node per level
+const lists = [countryList, null, null, null];
+const labels = ["Country", "", "", ""];
+const opened = {}, measured = {};
+SEL.forEach((sel, k) => {
+  const start = () => { if (opened[k] == null) opened[k] = performance.now(); };
+  sel.addEventListener("pointerdown", start); sel.addEventListener("keydown", start);
+  sel.addEventListener("blur", () => { opened[k] = null; });
+  sel.addEventListener("change", () => {
+    if (opened[k] != null) measured[k] = (performance.now() - opened[k]) / 1000;
+    opened[k] = null;
+    chosen[k] = sel.value === "" ? null : lists[k][+sel.value];
+    for (let m = k+1; m < 4; m++){ chosen[m] = null; lists[m] = null; delete measured[m]; }
+    setupBelow(k);
+    render();
+  });
+});
+function setupBelow(k){
+  for (let m = k+1; m < 4; m++){ blank(SEL[m], "Select the field above first"); $("#helpL"+m).textContent = ""; }
+  $("#rowL3").hidden = true;
+  const c = chosen[0];
+  labels[1] = c ? c.divLabel : "State / province / region";
+  labels[2] = c && c.code === "JP" ? "Municipality (city, ward, town, village)" : c && c.code === "CN" ? "City (prefecture level)" : "City";
+  labels[3] = "District / county";
+  const node = chosen[k];
+  if (node && !node.leaf){
+    const next = kids(node), m = k+1;
+    if (m === 2 && node._municipality) labels[2] = "District";
+    if (m === 3) $("#rowL3").hidden = false;
+    if (!next.length) blank(SEL[m], m === 1 ? "No divisions recorded for this country" : "No places recorded for this selection");
+    else { lists[m] = next; fill(SEL[m], next, "Select…"); $("#helpL"+m).textContent = `${fmtInt(next.length)} entries, alphabetical. Timed.`; }
   }
-  renderAll();
-});
-$("#selCity").addEventListener("change", e => { stamp(e.target); curCity = e.target.value === "" ? null : cityList(curCountry2.code)[+e.target.value]; renderAll(); });
-["#nState","#nCountry","#nCity","#nYears","#bDefault"].forEach(s => $(s).addEventListener("input", () => {
-  if (!fit) $("#speedStatus").innerHTML = `Not yet tested. Until you finish the test, Steps 2 to 4 use the default estimate of <b>${(A().b0*1000).toFixed(0)} ms per row</b>.`;
-  renderAll();
+  if (chosen[1] && chosen[1]._municipality) labels[2] = "District";
+  [1,2,3].forEach(m => $("#labL"+m).textContent = labels[m]);
+}
+$("#helpL0").textContent = `${countryList.length} entries, alphabetical. Timed.`;
+fill(SEL[0], countryList, "Select…");
+
+// ---------- output ----------
+function meter(i, n){ return `<div class="meter" title="Position ${i} of ${n}"><span style="left:calc(${((i-1)/Math.max(1,n-1))*100}% - 1px)"></span></div>`; }
+function levelRows(){
+  const a = A(), b = slope(), out = [];
+  for (let k = 0; k < 4; k++){
+    const node = chosen[k]; if (!node) continue;
+    const list = lists[k], i = list.indexOf(node) + 1, n = list.length, tau = b*(i-1);
+    out.push({k, label:labels[k], node, i, n, tau, L: tau*a.n[k]*a.Y, nk:a.n[k], list});
+  }
+  return out;
+}
+function render(){
+  const a = A(), b = slope(), rows = levelRows(), box = $("#outAddr");
+  if (!rows.length){ box.innerHTML = ""; renderStatement(rows); return; }
+  let html = `<div class="tablewrap"><table><thead><tr><th>Field</th><th>Your entry</th><th class="n">Position</th><th>Place in list</th><th class="n">Per selection</th><th class="n">Lifetime</th><th class="n">Your actual time</th></tr></thead><tbody>`;
+  rows.forEach(r => {
+    const m = measured[r.k], pred = fit ? ` (line: ${(fit.a + fit.b*r.i).toFixed(2)} s)` : "";
+    html += `<tr><td>${esc(r.label)}</td><td>${esc(r.node.label)}</td><td class="n">${fmtInt(r.i)} of ${fmtInt(r.n)}</td><td style="min-width:120px">${meter(r.i, r.n)}</td><td class="n">${fmtDur(r.tau)}</td><td class="n">${fmtDur(r.L)}</td><td class="n">${m == null ? "—" : m.toFixed(2) + " s" + pred}</td></tr>`;
+  });
+  html += `</tbody></table></div>`;
+  const notes = rows.map(r => {
+    const first = r.list[0].label, last = r.list[r.n-1].label, lastL = b*(r.n-1)*r.nk*a.Y;
+    let s = `${esc(r.label)}: the first entry, ${esc(first)}, costs nothing; the last, ${esc(last)}, costs ${fmtDur(b*(r.n-1))} per selection and ${fmtDur(lastL)} per lifetime.`;
+    if (r.k === 1 && chosen[0] && chosen[0].code === "US"){
+      const ak = r.list.findIndex(x => x.label === "Alaska"), wy = r.list.findIndex(x => x.label === "Wyoming");
+      s += ` A Wyoming resident pays ${fmtDur(b*(wy-ak)*r.nk*a.Y)} more over a lifetime than an Alaska resident.`;
+    }
+    return s;
+  });
+  html += `<p class="small">${notes.join(" ")} At ${basis()}; selections per year and form-filling years as in Technical Note 5.${rows.some(r => r.n > 250) ? " One or more lists are longer than the test list; see Technical Note 7(d)." : ""}</p>`;
+  box.innerHTML = html;
+  renderStatement(rows);
+}
+function renderStatement(rows){
+  const box = $("#statementBox"), a = A();
+  if (!rows.length){ box.innerHTML = `<p class="small">Complete Steps 1 and 2 to generate your statement.</p>`; return; }
+  const total = rows.reduce((s,r) => s + r.L, 0);
+  const addr = rows.slice().reverse().map(r => r.node.label).join(", ");
+  box.innerHTML = `<h3>Statement of Lifetime Dropdown Liability</h3>
+    <p class="small">Residence: ${esc(addr)}. Selection speed: ${basis()}.</p>
+    <div class="tablewrap"><table><thead><tr><th>Line</th><th>Field</th><th>Entry</th><th class="n">Position</th><th class="n">Selections per year</th><th class="n">Lifetime time</th></tr></thead><tbody>
+    ${rows.map((r,j) => `<tr><td>${j+1}</td><td>${esc(r.label)}</td><td>${esc(r.node.label)}</td><td class="n">${fmtInt(r.i)} of ${fmtInt(r.n)}</td><td class="n">${r.nk}</td><td class="n">${fmtDur(r.L)}</td></tr>`).join("")}
+    <tr class="you"><td>${rows.length+1}</td><td colspan="4"><b>Total lifetime liability</b> (add lines 1 to ${rows.length}), over ${a.Y} form-filling years</td><td class="n"><b>${fmtDur(total)}</b></td></tr>
+    </tbody></table></div>
+    <p class="small">This statement is an estimate and is not payable. Assumptions: Technical Note 5.</p>`;
+}
+["#n0","#n1","#n2","#n3","#nYears","#bDefault"].forEach(s => $(s).addEventListener("input", () => {
+  if (!fit) $("#speedStatus").innerHTML = `Not yet tested. Until you finish the test, Step 2 uses the default estimate of <b>${(A().b0*1000).toFixed(0)} ms per row</b>.`;
+  render();
 }));
 </script>
 </body>
