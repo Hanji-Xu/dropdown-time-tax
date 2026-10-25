@@ -1,5 +1,7 @@
 # 06 Dropdown Time Tax
 
+**▶ Play it:** https://hanji-xu.github.io/dropdown-time-tax/
+
 **Observation:** Alaska is second in every alphabetical list of US state names, so Alaskans barely scroll. Wyoming is last. What does your place in the alphabet cost you over a lifetime, and how does that compare with what your place on the map costs you?
 
 **What it does:**
